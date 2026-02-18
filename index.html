@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حاسبة منتج الإدخار العقاري (تأصيل) - إصدار بيلد وايز</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --matte-gold: #BCA37F;
+            --dark-gold: #A68A64;
+            --deep-bronze: #5C4B37;
+            --dark-brown: #4A3728;
+            --light-gold: #EADBC8;
+            --obsidian: #111111;
+            --soft-white: #FAF9F6;
+            --pale-gold: #F9F4ED;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--soft-white);
+            color: var(--obsidian);
+            transition: all 0.3s ease;
+            background-image: radial-gradient(circle at 10% 20%, rgba(188, 163, 127, 0.05) 0%, transparent 20%);
+        }
+
+        .bg-obsidian { background-color: var(--obsidian) !important; }
+        .text-matte-gold { color: var(--matte-gold) !important; }
+
+        .gold-card {
+            background-color: var(--matte-gold) !important;
+            background-image: linear-gradient(145deg, #c7af8d, #bca37f) !important;
+            border: 1px solid rgba(0,0,0,0.05) !important;
+            border-radius: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 210px;
+            padding: 1.75rem 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-luxury {
+            background: #ffffff;
+            border: 1px solid rgba(188, 163, 127, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
+            border-radius: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-luxury:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(188, 163, 127, 0.1);
+        }
+
+        .input-gold {
+            background: #ffffff;
+            border: 1.5px solid #E5E7EB;
+            border-radius: 1.25rem;
+            transition: all 0.2s ease;
+            font-family: 'Verdana', 'Segoe UI', Tahoma, sans-serif !important;
+            text-align: center;
+        }
+
+        .input-gold:focus {
+            border-color: var(--obsidian);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(17, 17, 17, 0.05);
+        }
+
+        .en-font { font-family: 'Verdana', 'Segoe UI', Tahoma, sans-serif !important; }
+
+        .number-box-wrapper {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .number-box {
+            background-color: #ffffff;
+            border-radius: 1.25rem;
+            padding: 0.75rem 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: fit-content;
+            min-width: 150px;
+            max-width: 95%;
+            white-space: nowrap;
+            border: 1px solid rgba(188, 163, 127, 0.15);
+        }
+
+        .card-title {
+            font-size: 11px;
+            font-weight: 900;
+            color: rgba(0,0,0,0.85);
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.25rem;
+        }
+
+        .card-subtitle {
+            font-size: 9px;
+            font-weight: 700;
+            color: rgba(0,0,0,0.65);
+            margin-top: 0.25rem;
+        }
+
+        .card-header-main {
+            font-size: 1.875rem; 
+            font-weight: 900;
+            color: var(--dark-brown);
+            margin-bottom: 1.5rem;
+            width: 100%;
+            text-align: center;
+            letter-spacing: -0.05em;
+            text-shadow: 0 1px 1px rgba(0,0,0,0.02);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-up { animation: slideUp 0.6s ease-out forwards; }
+
+        /* --- PRINT SPECIFIC STYLES (A3 LANDSCAPE REPEATING HEADER) --- */
+        @media print {
+            @page {
+                size: A3 landscape;
+                margin: 8mm;
+            }
+
+            nav, .no-print, button { display: none !important; }
+            body { 
+                background: white !important; 
+                padding: 0 !important; 
+                margin: 0 !important; 
+                overflow: visible !important; 
+            }
+            
+            main { 
+                display: flex !important; 
+                flex-direction: row !important; 
+                gap: 4mm !important; 
+                max-width: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            aside {
+                flex: 0 0 280px !important; 
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 2mm !important;
+            }
+
+            section {
+                flex: 1 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 3mm !important;
+            }
+
+            /* Repeating Header for Print */
+            .print-table { width: 100%; border-collapse: collapse; }
+            .print-header-container { 
+                display: table-header-group !important; 
+            }
+            .print-header-content {
+                display: flex !important;
+                flex-direction: row-reverse;
+                justify-content: space-between;
+                align-items: center;
+                padding-bottom: 3mm;
+                margin-bottom: 4mm;
+                border-bottom: 2px solid #BCA37F;
+            }
+
+            /* Compact Cards for Print only */
+            .gold-card { 
+                background-color: #BCA37F !important; 
+                -webkit-print-color-adjust: exact; 
+                min-height: 85px !important; 
+                padding: 8px !important;
+                border-radius: 1rem !important;
+            }
+            .card-luxury {
+                padding: 8px !important;
+                border-radius: 1rem !important;
+                margin-bottom: 0 !important;
+                border: 1px solid #ddd !important;
+                break-inside: avoid !important;
+            }
+
+            /* Force page break before Financial Engine Card */
+            .print-break-before {
+                break-before: page !important;
+                page-break-before: always !important;
+                margin-top: 5mm !important;
+            }
+
+            .number-box { 
+                padding: 2px 8px !important; 
+                min-width: 90px !important;
+                background-color: #fff !important;
+                border: 1px solid #ccc !important;
+            }
+            .card-header-main { 
+                font-size: 1rem !important; 
+                margin-bottom: 5px !important; 
+            }
+            .card-title { font-size: 9px !important; margin-bottom: 2px !important; }
+            .card-subtitle { font-size: 8px !important; margin-top: 1px !important; }
+            
+            /* MAXIMIZED CHART SIZE FOR PRINT ON A3 */
+            #mainChartContainer {
+                height: 450px !important;
+                max-height: 450px !important;
+                padding: 0 !important;
+            }
+            
+            #mainChart { 
+                height: 450px !important;
+                width: 100% !important;
+            }
+
+            table { font-size: 9px !important; width: 100% !important; }
+            th, td { padding: 4px !important; }
+            tr { break-inside: avoid !important; }
+
+            #summaryFooter {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 5px !important;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- UI Navigation (Hidden in Print) -->
+    <nav class="bg-white/80 backdrop-blur-xl border-b border-light-gold/30 px-8 py-4 sticky top-0 z-50 no-print">
+        <div class="max-w-7xl mx-auto flex justify-between items-center text-right">
+            <div class="flex items-center gap-6">
+                <div class="bg-white px-6 py-3 rounded-2xl shadow-md border border-gray-100 flex items-center justify-center overflow-visible">
+                    <svg width="120" height="60" viewBox="0 0 290 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 10 H70 A 21 21 0 0 1 70 52 H20 V10 Z" fill="#BCA37F"/>
+                        <path d="M20 58 H70 A 21 21 0 0 1 70 100 H20 V58 Z" fill="#BCA37F"/>
+                        <rect x="125" y="10" width="38" height="90" rx="19" fill="#BCA37F"/>
+                        <rect x="178" y="45" width="38" height="55" rx="19" fill="#BCA37F"/>
+                        <rect x="231" y="10" width="38" height="90" rx="19" fill="#BCA37F"/>
+                        <text x="145" y="145" font-family="Verdana, Geneva, sans-serif" font-weight="900" font-size="44" fill="black" text-anchor="middle" style="letter-spacing: 2px;">BUILD WISE</text>
+                    </svg>
+                </div>
+                <div class="text-right text-black pr-6">
+                    <h1 class="text-xl font-black text-black tracking-tighter">حاسبة منتج الإدخار العقاري (تأصيل)</h1>
+                </div>
+            </div>
+            <button id="exportBtn" class="group flex items-center gap-3 px-8 py-3.5 bg-matte-gold text-black font-black rounded-2xl hover:brightness-110 transition-all shadow-xl border-b-4 border-black/20">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                </svg>
+                <span>تصدير التقرير الفني</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Wrapper Table (Repeating Header for Print) -->
+    <table class="print-table w-full">
+        <!-- Header is only visible in print and repeats on every page -->
+        <thead class="print-header-container hidden">
+            <tr>
+                <td>
+                    <div class="print-header-content p-4">
+                        <div class="flex items-center gap-6 flex-row-reverse w-full justify-between">
+                            <div class="overflow-visible">
+                                <svg width="150" height="70" viewBox="0 0 290 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 10 H70 A 21 21 0 0 1 70 52 H20 V10 Z" fill="#BCA37F"/>
+                                    <path d="M20 58 H70 A 21 21 0 0 1 70 100 H20 V58 Z" fill="#BCA37F"/>
+                                    <rect x="125" y="10" width="38" height="90" rx="19" fill="#BCA37F"/>
+                                    <rect x="178" y="45" width="38" height="55" rx="19" fill="#BCA37F"/>
+                                    <rect x="231" y="10" width="38" height="90" rx="19" fill="#BCA37F"/>
+                                    <text x="145" y="145" font-family="Verdana, Geneva, sans-serif" font-weight="900" font-size="44" fill="black" text-anchor="middle" style="letter-spacing: 2px;">BUILD WISE</text>
+                                </svg>
+                            </div>
+                            <div class="text-right border-r-2 border-matte-gold/40 pr-6">
+                                <h1 class="text-2xl font-black text-black">حاسبة منتج الإدخار العقاري (تأصيل)</h1>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <main class="max-w-[1600px] mx-auto p-4 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8">
+                        
+                        <!-- Sidebar -->
+                        <aside class="lg:col-span-4 space-y-6 no-print-side">
+                            <div class="gold-card border-r-8 border-r-obsidian shadow-2xl">
+                                <h2 class="card-header-main">بيانات العميل</h2>
+                                <div class="space-y-4 text-center w-full px-2">
+                                    <input type="text" id="clientName" placeholder="اسم المنشأة / العميل" class="w-full p-3 input-gold text-sm font-bold shadow-sm">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <input type="text" id="crNumber" placeholder="رقم السجل" class="w-full p-3 input-gold text-sm font-bold en-font shadow-sm">
+                                        <input type="text" id="contactNumber" placeholder="رقم التواصل" class="w-full p-3 input-gold text-sm font-bold en-font shadow-sm">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="gold-card border-r-8 border-r-obsidian shadow-2xl">
+                                <h2 class="card-header-main">بيانات العقار</h2>
+                                <div class="space-y-4 text-center w-full px-2">
+                                    <input type="text" id="unitRegion" placeholder="المنطقة" class="w-full p-3 input-gold text-sm font-bold shadow-sm">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <input type="text" id="unitArea" placeholder="المساحة" class="w-full p-3 input-gold text-sm font-bold shadow-sm">
+                                        <input type="text" id="unitType" placeholder="نوع الوحدة" class="w-full p-3 input-gold text-sm font-bold shadow-sm">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="gold-card border-r-8 border-r-obsidian shadow-2xl">
+                                <h2 class="card-header-main">تحليل تكاليف الوحدة</h2>
+                                <div class="space-y-6 text-center w-full px-2 text-right">
+                                    <input type="text" id="propertyValue" placeholder="قيمة الوحدة العقارية" class="w-full p-5 input-gold text-3xl font-black en-font border-black/5 shadow-lg" oninput="formatInput(this); updateRateFromDuration()">
+                                    <input type="text" id="initialPayment" placeholder="النقد المتوفر (الكاش)" class="w-full p-5 input-gold text-3xl font-black en-font border-black/5 shadow-lg" oninput="formatInput(this); updateRateFromDuration()">
+                                    <div id="costDetailsSidebar" class="hidden space-y-3 p-4 bg-white/40 backdrop-blur-md rounded-2xl border border-dashed border-black/10">
+                                        <div class="flex justify-between items-center text-[10px] font-bold text-black text-right">
+                                            <span>إجمالي السعي والضريبة:</span>
+                                            <span id="brokerTotal" class="en-font font-black text-right">0</span>
+                                        </div>
+                                        <hr class="border-black/5">
+                                        <div class="flex justify-between items-center text-[10px] font-black text-orange-900 text-right">
+                                            <span>قسط السعي (ش) (بضريبة):</span>
+                                            <span id="brokerMonthly" class="en-font text-right">0</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="gold-card border-r-8 border-r-obsidian shadow-2xl print-break-before">
+                                <h2 class="card-header-main">محرك العمليات المالية</h2>
+                                <div class="space-y-6 text-center text-black w-full px-2">
+                                    <div class="relative group">
+                                        <input type="text" id="mainAmount" placeholder="المبيعات اليومية" class="w-full p-5 input-gold text-4xl font-black en-font shadow-lg" oninput="formatInput(this); updateRateFromDuration()">
+                                        <span class="absolute left-5 top-1/2 -translate-y-1/2 text-black font-black text-sm">SAR</span>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="bg-white p-3 rounded-2xl border-2 border-black/5">
+                                            <label class="block text-[8px] font-black uppercase mb-1">صافي الربح %</label>
+                                            <input type="number" id="netProfit" placeholder="0" class="bg-transparent text-xl font-black text-black w-full text-center outline-none en-font" oninput="updateRateFromDuration()">
+                                        </div>
+                                        <div class="bg-white p-3 rounded-2xl border-2 border-black/5">
+                                            <label class="block text-[8px] font-black uppercase mb-1">مدة الإنجاز (أشهر)</label>
+                                            <input type="number" id="targetDurationInput" placeholder="0" class="bg-transparent text-xl font-black text-black w-full text-center outline-none en-font" oninput="updateRateFromDuration()">
+                                        </div>
+                                    </div>
+                                    <div class="bg-white p-3 rounded-2xl border-2 border-matte-gold/40 shadow-sm ring-2 ring-matte-gold/5">
+                                        <label class="block text-[8px] font-black text-matte-gold uppercase mb-1">نسبة الاستقطاع المقترحة %</label>
+                                        <input type="number" id="deductionRate" placeholder="0" step="0.1" class="bg-transparent text-2xl font-black text-black w-24 text-center outline-none en-font" oninput="calculate()">
+                                    </div>
+                                    <div id="suggestedRateContainer" class="hidden p-2 bg-red-50 border border-red-100 rounded-xl text-center">
+                                        <span class="block text-[8px] font-black text-red-600 uppercase">المطلوب للإنجاز الفعلي:</span>
+                                        <span id="suggestedValue" class="text-md font-black text-red-700 en-font">0%</span>
+                                    </div>
+                                    <div class="p-4 bg-obsidian rounded-2xl text-white text-center">
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-[9px] font-black text-matte-gold uppercase w-full">تحميل قسط السعي (ش)</span>
+                                            <input type="checkbox" id="intensiveMode" class="sr-only peer" checked onchange="updateRateFromDuration()">
+                                            <label for="intensiveMode" class="relative inline-flex items-center cursor-pointer">
+                                                <div class="w-9 h-5 bg-gray-600 rounded-full peer-checked:bg-matte-gold after:content-[''] after:absolute after:top-[2px] after:right-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-[-100%]"></div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </aside>
+
+                        <!-- Main Results Column -->
+                        <section class="lg:col-span-8 space-y-6">
+                            
+                            <!-- 1. Result Summary -->
+                            <div id="ownership-plan" class="card-luxury p-8 bg-[#F9F4ED] border-2 border-matte-gold/20 animate-up">
+                                <h2 class="card-header-main text-2xl mb-8 uppercase tracking-widest text-center">خطة التملك والتحصيل</h2>
+                                <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+                                    <div class="gold-card shadow-2xl border-none h-auto min-h-0 py-6">
+                                        <p class="card-title">المبلغ المستقطع</p>
+                                        <div class="number-box py-2 mt-2"><h3 id="displayTotalDeduction" class="text-xl font-black en-font">0</h3></div>
+                                        <p class="card-subtitle mt-2">يومياً من POS</p>
+                                    </div>
+                                    <div class="gold-card shadow-2xl border-none h-auto min-h-0 py-6">
+                                        <p class="card-title">الثمن الإجمالي</p>
+                                        <div class="number-box py-2 mt-2"><h3 id="displayNetPropSaving" class="text-xl font-black en-font">0</h3></div>
+                                        <p class="card-subtitle mt-2">المحقق للتملك</p>
+                                    </div>
+                                    <div class="gold-card shadow-2xl border-none h-auto min-h-0 py-6">
+                                        <p class="card-title">قسط السعي (ش)</p>
+                                        <div class="number-box py-2 mt-2"><h3 id="displayBrokerTotalPaid" class="text-xl font-black en-font">0</h3></div>
+                                        <p class="card-subtitle mt-2">المسددة بـ POS</p>
+                                    </div>
+                                    <div id="statusBox" class="gold-card shadow-2xl border-none h-auto min-h-0 py-6">
+                                        <p class="card-title">مدة الإنجاز الفعلية</p>
+                                        <div class="number-box py-2 mt-2">
+                                            <div class="flex items-baseline gap-1"><h3 id="displayMonthsCount" class="text-xl font-black en-font">0</h3><span class="text-[10px] font-bold uppercase">M</span></div>
+                                        </div>
+                                        <p class="card-subtitle mt-2">شهر تملك</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2. Combined Flow and Summary -->
+                            <div id="chart-summary-section" class="card-luxury p-10 bg-white shadow-2xl animate-up">
+                                <div class="text-center mb-10">
+                                    <h2 class="text-3xl font-black text-black leading-tight text-center">التدفقات النقدية من POS</h2>
+                                </div>
+                                <!-- MAXIMIZED CHART CONTAINER -->
+                                <div id="mainChartContainer" class="h-[420px] relative border-2 border-matte-gold/30 rounded-3xl p-0 bg-gray-50/20 shadow-inner overflow-hidden">
+                                    <canvas id="mainChart"></canvas>
+                                </div>
+
+                                <div class="card-luxury p-8 mt-12 bg-[#F9F4ED] border-2 border-matte-gold/20">
+                                    <h2 class="card-header-main text-2xl mb-8 uppercase tracking-widest text-center">المبالغ المسددة من المشتري</h2>
+                                    <div id="summaryFooter" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                        <div class="gold-card shadow-xl border-none h-auto min-h-0 py-6">
+                                            <span class="card-title mb-3">نقد توقيع العقد</span>
+                                            <div class="number-box py-2 min-w-[140px] mt-2"><p id="totalUpfrontNeeded" class="text-xl font-black en-font">0</p></div>
+                                            <p class="card-subtitle mt-2">دفعة + سعي كاش</p>
+                                        </div>
+                                        <div class="gold-card shadow-xl border-none h-auto min-h-0 py-6">
+                                            <span class="card-title mb-3">مجموع سحوبات POS</span>
+                                            <div class="number-box py-2 min-w-[140px] mt-2"><h3 id="totalDeductionFooter" class="text-xl font-black en-font">0</h3></div>
+                                            <p class="card-subtitle mt-2">إجمالي التحصيل</p>
+                                        </div>
+                                        <div class="gold-card shadow-xl border-none h-auto min-h-0 py-6">
+                                            <span class="card-title mb-3">المبلغ الكلي المسدد</span>
+                                            <div class="number-box py-2 min-w-[140px] mt-2"><h3 id="displayTotalPaidByBuyer" class="text-xl font-black en-font">0</h3></div>
+                                            <p class="card-subtitle mt-2">تكلفة التملك</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 3. Full Ledger Table -->
+                            <div id="table-section" class="card-luxury overflow-hidden animate-up">
+                                <div class="px-10 py-7 border-b border-light-gold/20 bg-gray-50/50 text-center">
+                                    <h3 class="font-black text-black text-lg w-full text-center">جدول الاستقطاع (التحصيل)</h3>
+                                </div>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-center en-font">
+                                        <thead>
+                                            <tr class="bg-gray-50/50 text-sm font-black text-black uppercase tracking-widest border-b border-light-gold/10 text-center">
+                                                <th class="px-6 py-6 text-center">الشهر</th>
+                                                <th class="px-6 py-6 text-center text-black">المبلغ المستقطع</th>
+                                                <th class="px-6 py-6 text-center text-orange-800">قسط السعي</th>
+                                                <th class="px-6 py-6 text-center text-blue-800">قسط العقار</th>
+                                                <th class="px-6 py-6 text-center">التغطية %</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tableBody" class="text-sm font-bold text-black divide-y divide-light-gold/10 text-center">
+                                        </tbody>
+                                        <tfoot id="tableFooter" class="text-center">
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </section>
+                    </main>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        const formatter = new Intl.NumberFormat('en-US', { style: 'decimal', minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        let chart = null;
+
+        function handlePrint() { window.print(); }
+        document.getElementById('exportBtn').addEventListener('click', handlePrint);
+
+        function formatInput(el) {
+            let val = el.value.replace(/,/g, '');
+            if (!isNaN(val) && val !== "") {
+                el.value = Number(val).toLocaleString('en-US');
+            }
+        }
+
+        function getRawValue(id) {
+            let val = document.getElementById(id).value.replace(/,/g, '');
+            return parseFloat(val) || 0;
+        }
+
+        function updateRateFromDuration() {
+            const dailySales = getRawValue('mainAmount');
+            const targetMonthsInput = parseFloat(document.getElementById('targetDurationInput').value) || 0;
+            const propertyVal = getRawValue('propertyValue');
+            const initialCash = getRawValue('initialPayment');
+            const isIntensive = document.getElementById('intensiveMode').checked;
+            const netProfit = parseFloat(document.getElementById('netProfit').value) || 0;
+
+            if (propertyVal <= 0 || dailySales <= 0 || targetMonthsInput <= 0) { calculate(); return; }
+
+            const monthlyVolume = dailySales * 30;
+            const vatRate = 0.15;
+            const saeiPartWithVat = (propertyVal * 0.025) * (1 + vatRate); 
+            const totalSaeiFullWithVat = (propertyVal * 0.05) * (1 + vatRate);         
+            const upfrontNeeded = initialCash + saeiPartWithVat;
+            const gapToFill = Math.max(0, propertyVal + totalSaeiFullWithVat - upfrontNeeded);
+
+            let monthlySavingTarget = (isIntensive ? (gapToFill - saeiPartWithVat) / targetMonthsInput : gapToFill / targetMonthsInput);
+            let requiredRateRaw = (monthlySavingTarget / monthlyVolume) * 100;
+            let requiredRateFixed = Math.ceil(requiredRateRaw * 10) / 10;
+            
+            let maxAllowedByProfit = (netProfit >= 25) ? 10 : (netProfit >= 20 ? 7 : 5);
+            const rateInput = document.getElementById('deductionRate');
+            const suggestedContainer = document.getElementById('suggestedRateContainer');
+            const suggestedValueDisplay = document.getElementById('suggestedValue');
+
+            if (requiredRateFixed > maxAllowedByProfit) {
+                rateInput.value = maxAllowedByProfit;
+                suggestedContainer.classList.remove('hidden');
+                suggestedValueDisplay.innerText = requiredRateFixed.toFixed(1) + '%';
+            } else {
+                rateInput.value = requiredRateFixed;
+                suggestedContainer.classList.add('hidden');
+            }
+            calculate();
+        }
+
+        function calculate() {
+            const sales = getRawValue('mainAmount');
+            const baseRate = parseFloat(document.getElementById('deductionRate').value) || 0;
+            const propertyVal = getRawValue('propertyValue');
+            const initialCash = getRawValue('initialPayment');
+            const isIntensive = document.getElementById('intensiveMode').checked;
+
+            const dailyDeductionAmount = sales * (baseRate / 100);
+            document.querySelectorAll('#displayTotalDeduction').forEach(el => el.innerText = formatter.format(Math.round(dailyDeductionAmount)));
+
+            if (propertyVal <= 0) {
+                document.getElementById('tableBody').innerHTML = '<tr><td colspan="5" class="text-center py-16 text-gray-300 italic font-bold text-center">بانتظار إدخال بيانات التملك...</td></tr>';
+                return;
+            }
+
+            const vatRate = 0.15;
+            const saeiPartWithVat = (propertyVal * 0.025) * (1 + vatRate); 
+            const totalSaeiFullWithVat = (propertyVal * 0.05) * (1 + vatRate);
+            const upfrontNeeded = initialCash + saeiPartWithVat;
+            const totalProjectCost = propertyVal + totalSaeiFullWithVat;
+            const gapToFill = Math.max(0, totalProjectCost - upfrontNeeded);
+
+            document.querySelectorAll('#displayBrokerTotalPaid').forEach(el => el.innerText = formatter.format(Math.round(saeiPartWithVat)));
+            document.getElementById('costDetailsSidebar').classList.remove('hidden');
+            document.getElementById('brokerTotal').innerText = formatter.format(Math.round(totalSaeiFullWithVat));
+            document.getElementById('brokerMonthly').innerText = formatter.format(Math.round(saeiPartWithVat)); 
+            document.querySelectorAll('#totalUpfrontNeeded').forEach(el => el.innerText = formatter.format(Math.round(upfrontNeeded)));
+
+            const monthlyBaseSavingLimit = sales * 30 * (baseRate / 100);
+            // UPDATED: Commission (Saei) installments divided by 5 months instead of 6
+            const monthlySaeiTarget = saeiPartWithVat / 5; 
+
+            let accDed = 0; let accNet = 0; let totSaei = 0; let labels = []; let data = []; let html = ''; 
+            let totalPOSSum = 0; let totalSaeiSum = 0; let totalNetSum = 0;
+
+            for (let m = 1; m <= 600; m++) {
+                // UPDATED: saei installments checked against month 5
+                let mSaei = (m <= 5) ? monthlySaeiTarget : 0;
+                let mNet = monthlyBaseSavingLimit;
+                let mPOS = isIntensive ? (mNet + mSaei) : mNet;
+                
+                // UPDATED: non-intensive logic checked against month 5
+                if (!isIntensive && m <= 5) mNet = Math.max(0, monthlyBaseSavingLimit - mSaei);
+
+                if (accDed + mPOS >= gapToFill - 1.0) {
+                    mPOS = Math.max(0, gapToFill - accDed);
+                    // UPDATED: Finalizing month distribution check against month 5
+                    if (m <= 5 && mSaei > 0 && mPOS > 0) {
+                        let totalPotential = (isIntensive ? (monthlyBaseSavingLimit + monthlySaeiTarget) : monthlyBaseSavingLimit);
+                        let ratio = (totalPotential > 0) ? mPOS / totalPotential : 1;
+                        mNet = isIntensive ? (monthlyBaseSavingLimit * ratio) : mPOS;
+                        mSaei = isIntensive ? (monthlySaeiTarget * ratio) : 0;
+                    } else { mNet = mPOS; mSaei = 0; }
+                    accDed += mPOS; accNet += mNet; 
+                    totalPOSSum += mPOS; totalSaeiSum += mSaei; totalNetSum += mNet;
+                    labels.push(m + ' M'); data.push(Math.round(accDed));
+                    html += buildRow(m, mPOS, mSaei, mNet, (accDed / gapToFill) * 100);
+                    break;
+                }
+                accDed += mPOS; accNet += mNet; 
+                totalPOSSum += mPOS; totalSaeiSum += mSaei; totalNetSum += mNet;
+                labels.push(m + ' M'); data.push(Math.round(accDed));
+                html += buildRow(m, mPOS, mSaei, mNet, (accDed / gapToFill) * 100);
+            }
+
+            document.getElementById('tableBody').innerHTML = html;
+            document.getElementById('tableFooter').innerHTML = `
+                <tr class="bg-obsidian border-t-4 border-matte-gold/30 text-white font-black text-center">
+                    <td class="py-6">الإجمالي</td>
+                    <td class="py-6 text-matte-gold">${formatter.format(Math.round(totalPOSSum))}</td>
+                    <td class="py-6 text-orange-300">${formatter.format(Math.round(totalSaeiSum))}</td>
+                    <td class="py-6 text-blue-300">${formatter.format(Math.round(totalNetSum))}</td>
+                    <td class="py-6">100%</td>
+                </tr>`;
+
+            document.querySelectorAll('#displayNetPropSaving').forEach(el => el.innerText = formatter.format(Math.round(accNet)));
+            document.querySelectorAll('#displayMonthsCount').forEach(el => el.innerText = labels.length);
+            document.querySelectorAll('#totalDeductionFooter').forEach(el => el.innerText = formatter.format(Math.round(accDed)));
+            document.querySelectorAll('#displayTotalPaidByBuyer').forEach(el => el.innerText = formatter.format(Math.round(upfrontNeeded + accDed)));
+
+            updateChart(labels, data, gapToFill);
+        }
+
+        function buildRow(m, mPOS, mSaei, mNet, perc) {
+            const displayPerc = perc >= 100 ? "100" : perc.toFixed(1);
+            return `<tr class="text-center">
+                <td class="py-5 font-black text-matte-gold text-center">${m}</td>
+                <td class="py-5 text-center">${formatter.format(Math.round(mPOS))}</td>
+                <td class="py-5 text-orange-800 text-center">${mSaei > 1 ? formatter.format(Math.round(mSaei)) : '-'}</td>
+                <td class="py-5 text-blue-800 text-center">${formatter.format(Math.round(mNet))}</td>
+                <td class="py-5 text-center"><span class="px-3 py-1 bg-gray-100 rounded-full text-[10px] font-black text-center">${displayPerc}%</span></td>
+            </tr>`;
+        }
+
+        function updateChart(labels, data, target) {
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            if (chart) chart.destroy();
+
+            const targetLabelPlugin = {
+                id: 'targetLabel',
+                afterDraw(chart) {
+                    const { ctx, chartArea: { right }, scales: { y } } = chart;
+                    const val = target; if (val <= 0) return;
+                    const yPos = y.getPixelForValue(val);
+                    const text = formatter.format(Math.round(val));
+                    ctx.save(); ctx.font = 'bold 12px Verdana';
+                    const textWidth = ctx.measureText(text).width;
+                    const bH = 24; const bW = textWidth + 16;
+                    ctx.fillStyle = '#111111'; ctx.strokeStyle = '#BCA37F'; ctx.lineWidth = 1.5;
+                    ctx.beginPath(); ctx.roundRect(right + 5, yPos - (bH / 2), bW, bH, 6); ctx.fill(); ctx.stroke();
+                    ctx.fillStyle = '#BCA37F'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+                    ctx.fillText(text, right + 13, yPos); ctx.restore();
+                }
+            };
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                plugins: [targetLabelPlugin],
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'التراكمي', data: data, borderColor: '#BCA37F', backgroundColor: 'rgba(188, 163, 127, 0.1)', fill: true, tension: 0.4, borderWidth: 6, pointRadius: 4, pointBackgroundColor: '#111', pointBorderColor: '#fff', pointBorderWidth: 2 },
+                        { label: 'الهدف', data: labels.map(() => target), borderColor: '#111', borderDash: [8, 4], borderWidth: 2.5, pointRadius: 0, fill: false }
+                    ]
+                },
+                options: {
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    layout: { padding: { right: 105, top: 0, left: 0, bottom: 0 } },
+                    plugins: { 
+                        legend: { display: false }, 
+                        tooltip: { backgroundColor: '#111', padding: 12, displayColors: false, callbacks: { label: (ctx) => ' ' + formatter.format(ctx.raw) + ' SAR' } } 
+                    },
+                    scales: {
+                        y: { 
+                            position: 'right', 
+                            grid: { color: 'rgba(0,0,0,0.03)' }, 
+                            ticks: { 
+                                font: { family: 'Verdana', size: 10 }, 
+                                callback: (v) => formatter.format(v),
+                                padding: 2
+                            } 
+                        },
+                        x: { 
+                            grid: { display: false }, 
+                            ticks: { 
+                                font: { family: 'Verdana', size: 10, weight: 'bold' },
+                                padding: 2
+                            } 
+                        }
+                    }
+                }
+            });
+        }
+        window.onload = () => { calculate(); };
+    </script>
+</body>
+</html>
