@@ -72,13 +72,13 @@
             background: #ffffff;
             border: 1.5px solid #E5E7EB;
             border-radius: 1rem;
-            font-family: 'Verdana', sans-serif !important; /* Force font that uses English digits */
+            font-family: 'Verdana', sans-serif !important; 
             text-align: center;
             width: 100%;
             padding: 10px;
             font-size: 14px;
             appearance: none;
-            direction: ltr; /* Ensure input flow is LTR for numbers */
+            direction: ltr; /* Force LTR for all inputs to support English digit display */
         }
 
         .input-gold:focus {
@@ -264,11 +264,11 @@
                                     <div class="grid grid-cols-2 gap-3">
                                         <div>
                                             <label class="input-label">رقم السجل التجاري</label>
-                                            <input type="text" id="crNumber" placeholder="1010XXXXXX" class="input-gold en-font">
+                                            <input type="text" id="crNumber" placeholder="1010XXXXXX" class="input-gold en-font" oninput="formatInput(this)">
                                         </div>
                                         <div>
                                             <label class="input-label">رقم التواصل</label>
-                                            <input type="text" id="contactNumber" placeholder="05XXXXXXXX" class="input-gold en-font">
+                                            <input type="text" id="contactNumber" placeholder="05XXXXXXXX" class="input-gold en-font" oninput="formatInput(this)">
                                         </div>
                                     </div>
                                 </div>
@@ -340,7 +340,7 @@
                                         </div>
                                         <div>
                                             <div class="flex items-center justify-between mb-1">
-                                                <label class="text-[10px] font-black text-matte-gold">نسبة الاستقطاع %</label>
+                                                <label class="text-[10px] font-black text-matte-gold">نسبة الاستوقاع %</label>
                                                 <div class="flex items-center gap-1 no-print">
                                                     <input type="checkbox" id="manualRateToggle" class="w-3 h-3 accent-matte-gold cursor-pointer" onchange="toggleManualRate()">
                                                 </div>
@@ -405,7 +405,7 @@
                             </div>
                         </aside>
 
-                        <!-- Results -->
+                        <!-- Results Content -->
                         <section class="lg:col-span-8 space-y-6">
                             
                             <!-- Summary Cards -->
@@ -501,37 +501,49 @@
 
         /**
          * Converts Eastern Arabic numerals (٠-٩) to English numerals (0-9).
+         * Strictly filters the value to ensure only English digits are kept.
          * @param {string} str - The string to convert.
-         * @returns {string} - Converted string.
+         * @returns {string} - Converted string with only digits.
          */
         function toEnglishDigits(str) {
             const arabicNumerals = [/٠/g, /١/g, /٢/g, /٣/g, /٤/g, /٥/g, /٦/g, /٧/g, /٨/g, /٩/g];
+            let cleanStr = str;
             for (let i = 0; i < 10; i++) {
-                str = str.replace(arabicNumerals[i], i);
+                cleanStr = cleanStr.replace(arabicNumerals[i], i);
             }
-            return str;
+            // Remove any remaining non-digit characters except for comma handling later
+            return cleanStr;
         }
 
         /**
-         * Cleans input to ensure only English digits and formatting commas remain.
+         * Cleans input to ensure ONLY English digits are allowed.
          * @param {HTMLInputElement} el - The input element.
          */
         function formatInput(el) {
-            // First convert any Arabic numbers typed to English
+            // 1. Convert Arabic numerals to English
             let val = toEnglishDigits(el.value);
-            // Remove everything except numbers
-            val = val.replace(/,/g, '');
             
-            if (!isNaN(val) && val !== "") {
+            // 2. Remove any character that is NOT an English digit 0-9
+            val = val.replace(/[^0-9]/g, '');
+            
+            // 3. Re-format with commas for display if it's not empty
+            if (val !== "") {
+                // If it's the profit field, we might not want commas beyond 100, 
+                // but for consistency we use the number formatter.
                 el.value = Number(val).toLocaleString('en-US');
             } else {
-                el.value = val;
+                el.value = "";
             }
+            
+            // Trigger calculation
+            runCalculation();
         }
 
         function getRawValue(id) {
-            let val = document.getElementById(id).value.replace(/,/g, '');
-            return parseFloat(toEnglishDigits(val)) || 0;
+            let val = document.getElementById(id).value;
+            // Clean value to get raw number
+            let raw = toEnglishDigits(val).replace(/[^0-9.]/g, '');
+            return parseFloat(raw) || 0;
         }
 
         function setCalcMode(mode) {
@@ -658,11 +670,9 @@
 
                 if (contributionAtCurrentRate < gap - 1) {
                     suggestBox.style.display = 'block';
-                    // Accurate Required Rate Calculation for 2 decimal points
                     const neededRate = ((propertyVal * denominator - initialCash) / (mainSales * 30 * targetDuration)) * 100;
                     document.getElementById('suggestedRateValue').innerText = precisionFormatter.format(neededRate);
                     
-                    // Shortfall SAR amount
                     const shortfallAmount = gap - contributionAtCurrentRate;
                     document.getElementById('shortfallAmountValue').innerText = formatter.format(Math.round(shortfallAmount));
                 } else {
