@@ -767,7 +767,7 @@
                 if (contributionAtCurrentRate < gap - 0.5) {
                     suggestBox.style.display = 'block'; optimizedBox.style.display = 'none'; earlyAlert.style.display = 'none';
                     
-                    // Always show the increase bullet if there's a deficit, even at 18 months
+                    // Force display and update bullet even if targetDuration is 18
                     durationOptionLi.style.setProperty('display', 'list-item', 'important');
                     durationOptionLi.innerHTML = `- زيادة مدة الادخار المستهدفة لتصبح <span class="en-font text-red-700">${suggestedDuration}</span> شهر.`;
 
