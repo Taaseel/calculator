@@ -445,7 +445,7 @@
 
                         <section class="lg:col-span-8 space-y-6">
                             
-                            <!-- Summary Cards -->
+                            <!-- Summary -->
                             <div class="card-luxury bg-[#F9F4ED] border-2 border-matte-gold/20 animate-up">
                                 <h2 class="card-header-main text-lg md:text-2xl mb-6 uppercase tracking-widest text-center">خطة التملك والتحصيل</h2>
                                 <div class="grid grid-cols-4 gap-3 md:gap-4">
@@ -595,6 +595,11 @@
             document.getElementById('tableFooter').innerHTML = '';
             document.querySelectorAll('#displayTotalDeduction, #displayNetPropSaving, #displayBrokerTotalPaid, #displayMonthsCount, #displayInitialCashFooter, #totalUpfrontSaeiFooter, #totalDeductionFooter').forEach(el => el.innerText = "0");
             
+            // Explicitly clear the sidebar cost elements
+            document.getElementById('brokerTotal').innerText = "0";
+            document.getElementById('brokerMonthly').innerText = "0";
+            document.getElementById('brokerAtSigning').innerText = "0";
+
             suggestBox.style.display = 'none';
             optimizedBox.style.display = 'none';
             earlyAlert.style.display = 'none';
@@ -791,6 +796,12 @@
                 document.getElementById('tableBody').innerHTML = '<tr><td colspan="6" class="py-16 text-gray-300 italic font-bold">بانتظار البيانات...</td></tr>';
                 document.getElementById('tableFooter').innerHTML = ''; 
                 document.querySelectorAll('#displayNetPropSaving, #displayBrokerTotalPaid, #displayMonthsCount, #displayInitialCashFooter, #totalUpfrontSaeiFooter, #totalDeductionFooter').forEach(el => el.innerText = "0");
+                
+                // Explicitly clear sidebar elements here as well
+                document.getElementById('brokerTotal').innerText = "0";
+                document.getElementById('brokerMonthly').innerText = "0";
+                document.getElementById('brokerAtSigning').innerText = "0";
+
                 return 0;
             }
 
