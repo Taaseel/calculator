@@ -55,7 +55,7 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            padding: 1.25rem 0.75rem;
+            padding: 1rem 0.5rem;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -67,7 +67,7 @@
             border: 1px solid rgba(188, 163, 127, 0.2);
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.02);
             border-radius: 1.5rem;
-            padding: 1.5rem;
+            padding: 1.25rem;
         }
 
         .input-gold {
@@ -77,8 +77,8 @@
             font-family: 'Verdana', sans-serif !important; 
             text-align: center;
             width: 100%;
-            padding: 10px;
-            font-size: 14px;
+            padding: 12px;
+            font-size: 15px;
             appearance: none;
             direction: ltr;
         }
@@ -106,19 +106,19 @@
 
         .number-box {
             background-color: #ffffff;
-            border-radius: 1rem;
-            padding: 0.5rem 1rem;
+            border-radius: 0.85rem;
+            padding: 0.4rem 0.75rem;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             display: inline-flex;
             align-items: center;
             justify-content: center;
             width: fit-content;
-            min-width: 120px;
+            min-width: 100px;
             border: 1px solid rgba(188, 163, 127, 0.15);
         }
 
         .card-header-main {
-            font-size: 1.25rem; 
+            font-size: 1.15rem; 
             font-weight: 900;
             color: var(--dark-brown);
             margin-bottom: 1rem;
@@ -127,8 +127,8 @@
 
         .mode-toggle-btn {
             flex: 1;
-            padding: 10px 5px;
-            font-size: 10px;
+            padding: 12px 5px;
+            font-size: 11px;
             font-weight: 900;
             border-radius: 0.75rem;
             transition: all 0.3s ease;
@@ -173,34 +173,30 @@
 
         @media (max-width: 768px) {
             main { grid-template-columns: 1fr !important; padding: 12px !important; gap: 16px !important; }
-            aside { order: 1 !important; }
-            section { order: 2 !important; }
+            aside { order: 2 !important; }
+            section { order: 1 !important; }
             .grid-cols-4 { grid-template-columns: repeat(2, 1fr) !important; }
+            .grid-cols-3 { grid-template-columns: 1fr !important; }
             .grid-cols-2 { grid-template-columns: 1fr !important; }
             .card-luxury { padding: 1.25rem !important; }
             #mainChartContainer { height: 320px !important; }
-            .input-gold { font-size: 16px; }
+            .input-gold { font-size: 16px; } /* Prevent iOS zoom */
             nav h1 { font-size: 11px !important; }
-            .buyer-pay-grid { grid-template-columns: 1fr !important; }
+            .buyer-pay-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+            .card-title { font-size: 10px !important; }
+            .card-subtitle { font-size: 9px !important; }
         }
 
         /* --- RESTORED A3 LANDSCAPE PRINT SETTINGS (Fixed Total Row Repeat) --- */
         @media print {
             @page { size: A3 landscape; margin: 10mm; }
-            
             nav, .no-print, button, .mode-selector-container, #modeDescription { display: none !important; }
-            
             body { background: white !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; width: 100% !important; }
-            
             main { display: grid !important; grid-template-columns: repeat(12, 1fr) !important; gap: 8mm !important; width: 100% !important; padding: 0 !important; }
-            
             aside { grid-column: span 4 !important; order: 1 !important; }
             section { grid-column: span 8 !important; order: 2 !important; }
-            
             .card-luxury { break-inside: avoid !important; border: 1px solid #EADBC8 !important; margin-bottom: 5mm !important; }
-            
             .print-header-container { display: table-header-group !important; }
-            
             .print-header-content { 
                 display: flex !important; 
                 flex-direction: row-reverse !important; 
@@ -211,14 +207,9 @@
                 margin-bottom: 5mm !important; 
                 width: 100% !important;
             }
-            
             #mainChartContainer { height: 480px !important; border: 2px solid #BCA37F !important; margin: 5mm 0 !important; }
-            
             .print-break-before { break-before: page !important; page-break-before: always !important; }
-            
             table { width: 100% !important; border-collapse: collapse !important; border: 1px solid #ddd !important; table-layout: auto !important; }
-            
-            /* Styled row injected at end of tbody */
             .total-row-highlight {
                 background-color: #BCA37F !important;
                 -webkit-print-color-adjust: exact;
@@ -226,33 +217,29 @@
                 color: #000 !important;
                 page-break-inside: avoid !important;
             }
-            
             .gold-card { background-color: #BCA37F !important; padding: 1.5rem !important; border: 1px solid #111 !important; color: black !important; }
-            
             .suggested-rate-box[style*="display: block"] { 
                 display: block !important; 
                 border: 2px solid #BCA37F !important;
                 background-color: #FFF9E6 !important;
                 page-break-inside: avoid !important;
             }
-
             .early-success-alert[style*="display: block"] { 
                 display: block !important; 
                 background-color: #E6F4EA !important; 
                 border: 1px solid #1E7E34 !important; 
             }
-            
             .buyer-pay-grid { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 5mm !important; }
         }
     </style>
 </head>
 <body class="antialiased">
 
-    <nav class="bg-white/80 backdrop-blur-xl border-b border-light-gold/30 px-3 md:px-8 py-3 sticky top-0 z-50 no-print">
+    <nav class="bg-white/80 backdrop-blur-xl border-b border-light-gold/30 px-4 md:px-8 py-3 sticky top-0 z-50 no-print">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-2 md:gap-3">
                 <div class="bg-white px-2 md:px-3 py-1 md:py-1.5 rounded-lg shadow-sm border border-gray-100 block">
-                    <svg width="45" height="22" viewBox="0 0 290 160" fill="none" xmlns="http://www.w3.org/2000/svg" class="md:w-[60px] md:h-[30px]">
+                    <svg width="35" height="18" viewBox="0 0 290 160" fill="none" xmlns="http://www.w3.org/2000/svg" class="md:w-[60px] md:h-[30px]">
                         <path d="M20 10 H70 A 21 21 0 0 1 70 52 H20 V10 Z" fill="#BCA37F"/>
                         <path d="M20 58 H70 A 21 21 0 0 1 70 100 H20 V58 Z" fill="#BCA37F"/>
                         <rect x="125" y="10" width="38" height="90" rx="19" fill="#BCA37F"/>
@@ -315,7 +302,7 @@
                                     </div>
                                     <div class="grid grid-cols-2 gap-3">
                                         <div>
-                                            <label class="input-label">رقم السجل التجاري</label>
+                                            <label class="input-label">السجل التجاري</label>
                                             <input type="text" id="crNumber" placeholder="1010XXXXXX" class="input-gold en-font" oninput="formatInput(this)">
                                         </div>
                                         <div>
@@ -340,7 +327,7 @@
                                             <input type="text" id="unitArea" placeholder="300 m2" class="input-gold">
                                         </div>
                                         <div>
-                                            <label class="input-label">نوع الوحدة العقارية</label>
+                                            <label class="input-label">نوع الوحدة</label>
                                             <input type="text" id="unitType" placeholder="فيلا / شقة" class="input-gold">
                                         </div>
                                     </div>
@@ -352,15 +339,15 @@
                                 <h2 class="card-header-main">محرك العمليات المالية</h2>
                                 
                                 <div class="flex gap-2 p-1 bg-gray-100 rounded-xl mb-3 no-print">
-                                    <button id="modeValueBtn" class="mode-toggle-btn active" onclick="setCalcMode('value')">تحديد القدرة الشرائية</button>
-                                    <button id="modeDurationBtn" class="mode-toggle-btn" onclick="setCalcMode('duration')">تخطيط جدول التملك</button>
+                                    <button id="modeValueBtn" class="mode-toggle-btn active" onclick="setCalcMode('value')">القدرة الشرائية</button>
+                                    <button id="modeDurationBtn" class="mode-toggle-btn" onclick="setCalcMode('duration')">جدول التملك</button>
                                 </div>
 
                                 <div id="modeDescription" class="text-[10px] text-dark-brown font-black mb-5 p-2.5 rounded-xl border border-matte-gold/40 text-center leading-relaxed" style="background-color: var(--suggest-gold);"></div>
 
                                 <div class="space-y-5">
                                     <div>
-                                        <label class="input-label">متوسط المبيعات اليومية عبر POS</label>
+                                        <label class="input-label">متوسط المبيعات اليومية POS</label>
                                         <div class="relative">
                                             <input type="text" id="mainAmount" placeholder="0" class="input-gold text-2xl font-black en-font" oninput="formatInput(this); runCalculation()">
                                             <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-gray-400">SAR</span>
@@ -378,13 +365,12 @@
                                     <div class="grid grid-cols-2 gap-3">
                                         <div>
                                             <div class="flex items-center justify-between mb-1">
-                                                <label id="durationLabel" class="input-label font-black text-black">مدة الإدخار المختارة</label>
+                                                <label id="durationLabel" class="input-label font-black text-black">مدة الإدخار</label>
                                                 <div class="flex items-center gap-1 no-print">
-                                                    <span class="text-[9px] text-gray-400 font-bold">تحكم يدوي</span>
+                                                    <span class="text-[8px] text-gray-400 font-bold">يدوي</span>
                                                     <input type="checkbox" id="manualDurationToggle" class="w-3 h-3 accent-blue-800 cursor-pointer" onchange="toggleManualDuration()">
                                                 </div>
                                             </div>
-                                            <!-- Dropdown -->
                                             <select id="targetDurationDropdown" class="input-gold text-lg font-bold" onchange="runCalculation()">
                                                 <script>
                                                     for (let i = 1; i <= 18; i++) { 
@@ -392,14 +378,13 @@
                                                     }
                                                 </script>
                                             </select>
-                                            <!-- Manual Input -->
                                             <input type="number" id="manualDurationInput" style="display:none;" class="input-gold text-lg font-black en-font" placeholder="18" oninput="runCalculation()">
                                         </div>
                                         <div>
                                             <div class="flex items-center justify-between mb-1">
-                                                <label class="text-[10px] font-black text-matte-gold">نسبة الاستقطاع %</label>
+                                                <label class="text-[10px] font-black text-matte-gold">نسبة الاستقطاع</label>
                                                 <div class="flex items-center gap-1 no-print">
-                                                    <span class="text-[9px] text-gray-400 font-bold">تحكم يدوي</span>
+                                                    <span class="text-[8px] text-gray-400 font-bold">يدوي</span>
                                                     <input type="checkbox" id="manualRateToggle" class="w-3 h-3 accent-matte-gold cursor-pointer" onchange="toggleManualRate()">
                                                 </div>
                                             </div>
@@ -407,24 +392,22 @@
                                         </div>
                                     </div>
 
-                                    <!-- Treatment Notification Box -->
                                     <div id="suggestedRateBox" class="suggested-rate-box">
                                         <div class="text-orange-900 mb-2 border-b border-matte-gold/10 pb-2 font-black">
-                                            ⚠️ الوضع الراهن: هنالك عجز بزيادة قيمة <span id="shortfallAmountValue" class="en-font">0</span> في القسط الأخير.
+                                            ⚠️ عجز بقيمة <span id="shortfallAmountValue" class="en-font">0</span> في القسط الأخير.
                                         </div>
-                                        <div class="font-black text-dark-brown mb-1">أما المعالجة كالتالي:</div>
+                                        <div class="font-black text-dark-brown mb-1">المعالجة المقترحة:</div>
                                         <ul class="text-[10px] space-y-1 pr-1 text-gray-800 font-bold list-none">
-                                            <li>- نسبة الاستقطاع المقترحة هي <span id="suggestedRateValue" class="text-red-700 en-font">0.00</span>% للوصول للهدف.</li>
-                                            <li id="increaseDurationBullet">- زيادة مدة الادخار المستهدفة.</li>
-                                            <li>- دفع مقدمة (نقداً) بقيمة <span id="shortfallAmountValueSuggest" class="en-font text-red-700">0</span> لتغطية العجز في القسط الأخير.</li>
+                                            <li>- نسبة استقطاع <span id="suggestedRateValue" class="text-red-700 en-font">0.00</span>% .</li>
+                                            <li id="increaseDurationBullet">- زيادة المدة لتصبح <span class="en-font text-red-700">0</span> شهر.</li>
+                                            <li>- مقدم إضافي <span id="shortfallAmountValueSuggest" class="en-font text-red-700">0</span> .</li>
                                         </ul>
                                     </div>
 
-                                    <!-- Early Success Optimization Box -->
                                     <div id="optimizedRateBox" class="suggested-rate-box" style="background-color: var(--success-green); border-color: rgba(30, 126, 52, 0.2);">
-                                        <div class="text-success-text font-black mb-1">💡 الإنجاز المبكر:</div>
+                                        <div class="text-success-text font-black mb-1">💡 إنجاز مبكر:</div>
                                         <div class="text-[10px] text-gray-800 font-bold leading-relaxed">
-                                            الخطة الحالية تحقق الهدف مبكراً! في مدة <span id="earlyActualDuration" class="en-font text-success-text">0</span> شهر، نسبة الاستقطاع المقترحة هي <span id="optimizedRateValue" class="en-font text-success-text">0.00</span>% للوصول للهدف بدقة في مدة <span id="optimizedDurationTarget" class="en-font">0</span> شهر.
+                                            تحقق في <span id="earlyActualDuration" class="en-font text-success-text">0</span> شهر! الاستقطاع المقترح هو <span id="optimizedRateValue" class="en-font text-success-text">0.00</span>% للهدف في <span id="optimizedDurationTarget" class="en-font">0</span> شهر.
                                         </div>
                                     </div>
 
@@ -462,16 +445,16 @@
                                     </div>
                                     <div id="costDetailsSidebar" class="space-y-2 p-3 bg-pale-gold rounded-xl border border-dashed border-matte-gold/40">
                                         <div class="flex justify-between items-center text-[10px] font-bold">
-                                            <span>إجمالي الوساطة وإدارة المنتج 5% (شامل الضريبة):</span>
+                                            <span>الوساطة والإدارة 5% (شامل الضريبة):</span>
                                             <span id="brokerTotal" class="en-font font-black">0</span>
                                         </div>
                                         <hr class="border-matte-gold/10">
                                         <div class="flex justify-between items-center text-[10px] font-black text-orange-900">
-                                            <span>قسط الوساطة الشهري 2.5% (لمدة 5 ش):</span>
+                                            <span>قسط الوساطة 2.5% (5 ش):</span>
                                             <span id="brokerMonthly" class="en-font">0</span>
                                         </div>
                                         <div class="flex justify-between items-center text-[10px] font-black text-blue-900 mt-1">
-                                            <span>الوساطة 2.5% نقداً عند التوقيع:</span>
+                                            <span>وساطة 2.5% نقداً عند التوقيع:</span>
                                             <span id="brokerAtSigning" class="en-font">0</span>
                                         </div>
                                     </div>
@@ -486,55 +469,53 @@
                                 <h2 class="card-header-main text-lg md:text-2xl mb-6 uppercase tracking-widest text-center">خطة التملك والتحصيل</h2>
                                 <div class="grid grid-cols-4 gap-3 md:gap-4">
                                     <div class="gold-card shadow-lg">
-                                        <p class="card-title">المبلغ المستقطع</p>
+                                        <p class="card-title text-[11px] md:text-sm font-bold">المستقطع يومياً</p>
                                         <div class="number-box py-1 mt-1"><h3 id="displayTotalDeduction" class="text-sm md:text-xl font-black en-font text-center">0</h3></div>
-                                        <p class="card-subtitle mt-1">يومياً من POS</p>
+                                        <p class="card-subtitle text-[9px] md:text-[11px] mt-1">من POS</p>
                                     </div>
                                     <div class="gold-card shadow-lg">
-                                        <p class="card-title">أقساط العقار</p>
+                                        <p class="card-title text-[11px] md:text-sm font-bold">أقساط العقار</p>
                                         <div class="number-box py-1 mt-1"><h3 id="displayNetPropSaving" class="text-sm md:text-xl font-black en-font text-center">0</h3></div>
-                                        <p class="card-subtitle mt-1">المحقق بالاستقطاع</p>
+                                        <p class="card-subtitle text-[9px] md:text-[11px] mt-1">المحقق بالاستقطاع</p>
                                     </div>
                                     <div class="gold-card shadow-lg">
-                                        <p class="card-title">أقساط الوساطة</p>
+                                        <p class="card-title text-[11px] md:text-sm font-bold">أقساط الوساطة</p>
                                         <div class="number-box py-1 mt-1"><h3 id="displayBrokerTotalPaid" class="text-sm md:text-xl font-black en-font text-center">0</h3></div>
-                                        <p class="card-subtitle mt-1">المسددة بـ POS</p>
+                                        <p class="card-subtitle text-[9px] md:text-[11px] mt-1">عبر POS</p>
                                     </div>
                                     <div class="gold-card shadow-lg">
-                                        <p class="card-title">مدة الخطة</p>
+                                        <p class="card-title text-[11px] md:text-sm font-bold">مدة الخطة</p>
                                         <div class="number-box py-1 mt-1">
                                             <div class="flex items-baseline gap-1"><h3 id="displayMonthsCount" class="text-sm md:text-xl font-black en-font">0</h3><span class="text-[8px] font-bold uppercase">M</span></div>
                                         </div>
-                                        <p class="card-subtitle mt-1">شهر تملك</p>
-                                        <div id="earlySuccessAlert" class="early-success-alert">
-                                            تحقق الهدف في مدة أقل من المستهدفة!
-                                        </div>
+                                        <p class="card-subtitle text-[9px] md:text-[11px] mt-1">شهر تملك</p>
+                                        <div id="earlySuccessAlert" class="early-success-alert">تحقق الهدف مبكراً!</div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Chart -->
-                            <div class="card-luxury p-0 md:p-10 overflow-hidden">
-                                <div class="p-6 md:p-0 text-center mb-6">
-                                    <h2 class="text-xl md:text-2xl font-black text-black">منحنى التدفقات النقدية التراكمي</h2>
+                            <div class="card-luxury p-4 md:p-10 overflow-hidden">
+                                <div class="text-center mb-6">
+                                    <h2 class="text-lg md:text-2xl font-black text-black">منحنى التدفقات النقدية التراكمي</h2>
                                 </div>
-                                <div id="mainChartContainer" class="h-[300px] md:h-[400px] relative border-y md:border-2 border-matte-gold/20 md:rounded-3xl p-0 bg-gray-50/10">
+                                <div id="mainChartContainer" class="h-[280px] md:h-[400px] relative border-y md:border-2 border-matte-gold/20 md:rounded-3xl p-0 bg-gray-50/10">
                                     <canvas id="mainChart"></canvas>
                                 </div>
 
                                 <div class="p-6 md:p-8 mt-6 md:mt-10 bg-[#F9F4ED] md:border-2 border-matte-gold/10 md:rounded-3xl print-break-before">
-                                    <h2 class="card-header-main text-lg mb-6 text-center">المبالغ التي يتم سدادها من المشتري</h2>
-                                    <div id="summaryFooter" class="grid grid-cols-3 gap-3 md:gap-6 buyer-pay-grid">
+                                    <h2 class="card-header-main text-lg mb-6 text-center">المبالغ المسددة من المشتري</h2>
+                                    <div id="summaryFooter" class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-6 buyer-pay-grid">
                                         <div class="gold-card shadow-md">
-                                            <span class="card-title text-[9px] md:text-[11px]">دفعة مقدمة</span>
+                                            <span class="card-title text-[11px]">دفعة مقدمة نقداً</span>
                                             <div class="number-box py-1.5 mt-1.5"><p id="displayInitialCashFooter" class="text-sm md:text-xl font-black en-font">0</p></div>
                                         </div>
                                         <div class="gold-card shadow-md">
-                                            <span class="card-title text-[9px] md:text-[11px]">الوساطة (نقداً عند التوقيع)</span>
+                                            <span class="card-title text-[11px]">الوساطة عند التوقيع</span>
                                             <div class="number-box py-1.5 mt-1.5"><p id="totalUpfrontSaeiFooter" class="text-sm md:text-xl font-black en-font">0</p></div>
                                         </div>
                                         <div class="gold-card shadow-md">
-                                            <span class="card-title text-[9px] md:text-[11px]">إجمالي تحصيل POS</span>
+                                            <span class="card-title text-[11px]">إجمالي تحصيل POS</span>
                                             <div class="number-box py-1.5 mt-1.5"><h3 id="totalDeductionFooter" class="text-sm md:text-xl font-black en-font">0</h3></div>
                                         </div>
                                     </div>
@@ -542,24 +523,23 @@
                             </div>
 
                             <!-- Ledger Table -->
-                            <div class="card-luxury overflow-hidden">
+                            <div class="card-luxury overflow-hidden p-0">
                                 <div class="px-6 py-4 border-b border-light-gold/20 bg-gray-50/50 text-center">
-                                    <h3 class="font-black text-black text-lg">جدول الاستقطاع والتحصيل الشهري</h3>
+                                    <h3 class="font-black text-black text-md md:text-lg">جدول الاستقطاع والتحصيل الشهري</h3>
                                 </div>
-                                <div class="overflow-x-auto">
-                                    <table class="w-full text-center en-font whitespace-nowrap">
+                                <div class="overflow-x-auto w-full">
+                                    <table class="w-full text-center en-font whitespace-nowrap min-w-[600px]">
                                         <thead>
-                                            <tr class="bg-gray-50/50 text-[10px] font-black text-black uppercase border-b border-light-gold/10">
-                                                <th class="px-4 py-3 text-center">الشهر</th>
-                                                <th class="px-4 py-3 text-center">الاستقطاع اليومي POS</th>
-                                                <th class="px-4 py-3 text-center">الاستقطاع الشهري POS</th>
-                                                <th class="px-4 py-3 text-center text-orange-800">قسط الوساطة</th>
-                                                <th class="px-4 py-3 text-center text-blue-800">قسط العقار</th>
-                                                <th class="px-4 py-3 text-center">التغطية</th>
+                                            <tr class="bg-gray-50/50 text-[9px] md:text-[10px] font-black text-black uppercase border-b border-light-gold/10">
+                                                <th class="px-2 py-3 text-center">الشهر</th>
+                                                <th class="px-2 py-3 text-center">يومي POS</th>
+                                                <th class="px-2 py-3 text-center">شهري POS</th>
+                                                <th class="px-2 py-3 text-center text-orange-800">قسط الوساطة</th>
+                                                <th class="px-2 py-3 text-center text-blue-800">قسط العقار</th>
+                                                <th class="px-2 py-3 text-center">التغطية</th>
                                             </tr>
                                         </thead>
                                         <tbody id="tableBody" class="text-xs font-bold text-black divide-y divide-light-gold/10"></tbody>
-                                        <!-- No tfoot here to prevent repeat in print pages -->
                                     </table>
                                 </div>
                             </div>
@@ -644,7 +624,7 @@
                 durationDropdown.disabled = false;
                 durationDropdown.classList.remove('output-highlight');
                 durationLabel.innerText = "مدة الإدخار المختارة";
-                descEl.innerHTML = `حدد <span class="text-blue-800 font-black">(المدة)</span> لتعرف <span class="text-matte-gold font-black">(سعر العقار)</span> المتاح لك بناءً على مبيعاتك`;
+                descEl.innerHTML = `حدد <span class="text-blue-800 font-black">(المدة)</span> لتعرف <span class="text-matte-gold font-black">(سعر العقار)</span> بناءً على مبيعاتك`;
             } else {
                 durationBtn.classList.add('active');
                 valueBtn.classList.remove('active');
@@ -766,8 +746,6 @@
 
                 if (contributionAtCurrentRate < gap - 0.5) {
                     suggestBox.style.display = 'block'; optimizedBox.style.display = 'none'; earlyAlert.style.display = 'none';
-                    
-                    // Force display and update bullet even if targetDuration is 18
                     durationOptionLi.style.setProperty('display', 'list-item', 'important');
                     durationOptionLi.innerHTML = `- زيادة مدة الادخار المستهدفة لتصبح <span class="en-font text-red-700">${suggestedDuration}</span> شهر.`;
 
@@ -848,7 +826,6 @@
                 if (accDed >= gapToFill - 0.5) break;
             }
 
-            // Move TOTAL to the end of tbody to prevent repeat in print
             const totalRowHtml = `<tr class="total-row-highlight" style="background-color: #BCA37F !important; color: #000 !important; font-weight: 900 !important; text-align: center !important;">
                 <td style="padding: 18px 10px !important; border-top: 3px solid #111 !important;">الإجمالي</td>
                 <td style="padding: 18px 10px !important; border-top: 3px solid #111 !important;">-</td>
@@ -876,11 +853,10 @@
                     const { ctx, chartArea: { right }, scales: { y } } = chart;
                     const yPos = y.getPixelForValue(target); if (target <= 0) return;
                     const text = formatter.format(Math.round(target));
-                    ctx.save(); ctx.font = 'bold 11px Verdana';
+                    ctx.save(); ctx.font = 'bold 10px Verdana';
                     const textWidth = ctx.measureText(text).width;
-                    const bH = 24; const bW = textWidth + 10;
                     ctx.fillStyle = '#111111'; ctx.strokeStyle = '#BCA37F'; ctx.lineWidth = 1.5;
-                    ctx.beginPath(); ctx.roundRect(right + 5, yPos - 12, bW + 10, 24, 6); ctx.fill(); ctx.stroke();
+                    ctx.beginPath(); ctx.roundRect(right + 5, yPos - 10, textWidth + 10, 20, 4); ctx.fill(); ctx.stroke();
                     ctx.fillStyle = '#BCA37F'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
                     ctx.fillText(text, right + 10, yPos); ctx.restore();
                 }
@@ -889,14 +865,14 @@
                 type: 'line', plugins: [targetLabelPlugin],
                 data: {
                     labels: labels,
-                    datasets: [{ label: 'تراكمي', data: data, borderColor: '#BCA37F', backgroundColor: 'rgba(188, 163, 127, 0.1)', fill: true, tension: 0.4, borderWidth: 5, pointRadius: 3, pointBackgroundColor: '#111', pointBorderColor: '#fff' },
+                    datasets: [{ label: 'تراكمي', data: data, borderColor: '#BCA37F', backgroundColor: 'rgba(188, 163, 127, 0.1)', fill: true, tension: 0.4, borderWidth: 4, pointRadius: 2, pointBackgroundColor: '#111', pointBorderColor: '#fff' },
                                { label: 'الهدف', data: labels.map(() => target), borderColor: '#111', borderDash: [6, 4], borderWidth: 2, pointRadius: 0 }]
                 },
                 options: {
-                    responsive: true, maintainAspectRatio: false, layout: { padding: { right: 85, top: 10 } }, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#111' } },
+                    responsive: true, maintainAspectRatio: false, layout: { padding: { right: 70, top: 10 } }, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#111' } },
                     scales: {
                         y: { position: 'right', grid: { color: 'rgba(0,0,0,0.03)' }, ticks: { font: { family: 'Verdana', size: 9 }, callback: (v) => formatter.format(v) } },
-                        x: { grid: { display: false }, ticks: { font: { family: 'Verdana', size: 9, weight: 'bold' } } }
+                        x: { grid: { display: false }, ticks: { font: { family: 'Verdana', size: 8, weight: 'bold' } } }
                     }
                 }
             });
