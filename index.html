@@ -184,7 +184,7 @@
             .buyer-pay-grid { grid-template-columns: 1fr !important; }
         }
 
-        /* --- RESTORED A3 LANDSCAPE PRINT SETTINGS --- */
+        /* --- RESTORED A3 LANDSCAPE PRINT SETTINGS (Fixed Total Row Repeat) --- */
         @media print {
             @page { size: A3 landscape; margin: 10mm; }
             
@@ -216,13 +216,15 @@
             
             .print-break-before { break-before: page !important; page-break-before: always !important; }
             
-            table { width: 100% !important; border-collapse: collapse !important; border: 1px solid #ddd !important; }
+            table { width: 100% !important; border-collapse: collapse !important; border: 1px solid #ddd !important; table-layout: auto !important; }
             
-            /* Crucial: Prevent repetition of total row if placed in tfoot, 
-               but we moved it to tbody to be safe. We also style the last row. */
+            /* Styled row injected at end of tbody */
             .total-row-highlight {
                 background-color: #BCA37F !important;
                 -webkit-print-color-adjust: exact;
+                font-weight: 900 !important;
+                color: #000 !important;
+                page-break-inside: avoid !important;
             }
             
             .gold-card { background-color: #BCA37F !important; padding: 1.5rem !important; border: 1px solid #111 !important; color: black !important; }
@@ -479,7 +481,7 @@
 
                         <section class="lg:col-span-8 space-y-6">
                             
-                            <!-- Summary Cards -->
+                            <!-- Summary -->
                             <div class="card-luxury bg-[#F9F4ED] border-2 border-matte-gold/20 animate-up">
                                 <h2 class="card-header-main text-lg md:text-2xl mb-6 uppercase tracking-widest text-center">خطة التملك والتحصيل</h2>
                                 <div class="grid grid-cols-4 gap-3 md:gap-4">
@@ -511,7 +513,7 @@
                                 </div>
                             </div>
 
-                            <!-- Chart Section -->
+                            <!-- Chart -->
                             <div class="card-luxury p-0 md:p-10 overflow-hidden">
                                 <div class="p-6 md:p-0 text-center mb-6">
                                     <h2 class="text-xl md:text-2xl font-black text-black">منحنى التدفقات النقدية التراكمي</h2>
@@ -557,7 +559,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="tableBody" class="text-xs font-bold text-black divide-y divide-light-gold/10"></tbody>
-                                        <!-- Footer replaced by the total row in tbody to prevent repetition in print -->
+                                        <!-- No tfoot here to prevent repeat in print pages -->
                                     </table>
                                 </div>
                             </div>
@@ -693,7 +695,8 @@
                     const isIntensive = document.getElementById('intensiveMode').checked;
                     const saeiPartWithVat = (propVal * 0.025) * 1.15;
                     const totalSaeiFullWithVat = (propVal * 0.05 * 1.15);
-                    const gapToFill = (propVal + totalSaeiFullWithVat) - (initialCash + saeiPartWithVat);
+                    const upfrontNeeded = initialCash + saeiPartWithVat;
+                    const gapToFill = (propVal + totalSaeiFullWithVat) - upfrontNeeded;
                     if (monthlyBase > 0) {
                         let monthsNeeded = Math.ceil((gapToFill - (isIntensive ? saeiPartWithVat : 0)) / monthlyBase);
                         if (isIntensive && monthsNeeded < 5) monthsNeeded = Math.ceil(gapToFill / (monthlyBase + (saeiPartWithVat / 5)));
