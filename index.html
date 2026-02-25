@@ -172,22 +172,22 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
         @media (max-width: 768px) {
-            main { grid-template-columns: 1fr !important; padding: 12px !important; gap: 16px !important; }
-            aside { order: 2 !important; }
-            section { order: 1 !important; }
-            .grid-cols-4 { grid-template-columns: repeat(2, 1fr) !important; }
+            main { grid-template-columns: 1fr !important; padding: 10px !important; gap: 16px !important; }
+            aside { order: 1 !important; } /* Inputs first on mobile */
+            section { order: 2 !important; } /* Results second on mobile */
+            .grid-cols-4 { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
             .grid-cols-3 { grid-template-columns: 1fr !important; }
             .grid-cols-2 { grid-template-columns: 1fr !important; }
-            .card-luxury { padding: 1.25rem !important; }
-            #mainChartContainer { height: 320px !important; }
-            .input-gold { font-size: 16px; } /* Prevent iOS zoom */
-            nav h1 { font-size: 11px !important; }
-            .buyer-pay-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+            .card-luxury { padding: 1rem !important; }
+            #mainChartContainer { height: 280px !important; }
+            .input-gold { font-size: 16px; padding: 10px; } /* Prevent iOS zoom */
+            nav h1 { font-size: 10px !important; }
+            .buyer-pay-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
             .card-title { font-size: 10px !important; }
             .card-subtitle { font-size: 9px !important; }
         }
 
-        /* --- RESTORED A3 LANDSCAPE PRINT SETTINGS (Fixed Total Row Repeat) --- */
+        /* --- PRINT SETTINGS --- */
         @media print {
             @page { size: A3 landscape; margin: 10mm; }
             nav, .no-print, button, .mode-selector-container, #modeDescription { display: none !important; }
@@ -235,11 +235,11 @@
 </head>
 <body class="antialiased">
 
-    <nav class="bg-white/80 backdrop-blur-xl border-b border-light-gold/30 px-4 md:px-8 py-3 sticky top-0 z-50 no-print">
+    <nav class="bg-white/80 backdrop-blur-xl border-b border-light-gold/30 px-3 md:px-8 py-3 sticky top-0 z-50 no-print">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-2 md:gap-3">
-                <div class="bg-white px-2 md:px-3 py-1 md:py-1.5 rounded-lg shadow-sm border border-gray-100 block">
-                    <svg width="35" height="18" viewBox="0 0 290 160" fill="none" xmlns="http://www.w3.org/2000/svg" class="md:w-[60px] md:h-[30px]">
+                <div class="bg-white px-1.5 md:px-3 py-1 md:py-1.5 rounded-lg shadow-sm border border-gray-100 block">
+                    <svg width="30" height="15" viewBox="0 0 290 160" fill="none" xmlns="http://www.w3.org/2000/svg" class="md:w-[60px] md:h-[30px]">
                         <path d="M20 10 H70 A 21 21 0 0 1 70 52 H20 V10 Z" fill="#BCA37F"/>
                         <path d="M20 58 H70 A 21 21 0 0 1 70 100 H20 V58 Z" fill="#BCA37F"/>
                         <rect x="125" y="10" width="38" height="90" rx="19" fill="#BCA37F"/>
@@ -248,13 +248,13 @@
                         <text x="145" y="145" font-family="Verdana" font-weight="900" font-size="44" fill="black" text-anchor="middle">BUILD WISE</text>
                     </svg>
                 </div>
-                <h1 class="text-[10px] sm:text-sm md:text-xl font-black text-black leading-tight">حاسبة منتج الإدخار العقاري (تأصيل)</h1>
+                <h1 class="text-[9px] sm:text-sm md:text-xl font-black text-black leading-tight">حاسبة منتج الإدخار العقاري (تأصيل)</h1>
             </div>
-            <button id="exportBtn" class="flex items-center gap-1.5 px-3 py-2 bg-matte-gold text-black font-black rounded-lg hover:brightness-110 shadow-md border-b-2 border-black/20 text-[10px] md:text-sm">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 md:h-4 md:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <button id="exportBtn" class="flex items-center gap-1 px-2.5 py-2 bg-matte-gold text-black font-black rounded-lg hover:brightness-110 shadow-md border-b-2 border-black/20 text-[9px] md:text-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 md:h-4 md:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                 </svg>
-                <span>تصدير التقرير</span>
+                <span>تصدير</span>
             </button>
         </div>
     </nav>
@@ -286,8 +286,8 @@
         <tbody>
             <tr>
                 <td>
-                    <main class="max-w-[1600px] mx-auto p-4 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
-                        <aside class="lg:col-span-4 space-y-6">
+                    <main class="max-w-[1600px] mx-auto p-2 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-8">
+                        <aside class="lg:col-span-4 space-y-4 md:space-y-6">
                             <!-- Card 1: Client Info -->
                             <div class="card-luxury border-r-8 border-r-matte-gold">
                                 <h2 class="card-header-main">بيانات العميل</h2>
@@ -343,7 +343,7 @@
                                     <button id="modeDurationBtn" class="mode-toggle-btn" onclick="setCalcMode('duration')">جدول التملك</button>
                                 </div>
 
-                                <div id="modeDescription" class="text-[10px] text-dark-brown font-black mb-5 p-2.5 rounded-xl border border-matte-gold/40 text-center leading-relaxed" style="background-color: var(--suggest-gold);"></div>
+                                <div id="modeDescription" class="text-[10px] text-dark-brown font-black mb-4 p-2.5 rounded-xl border border-matte-gold/40 text-center leading-relaxed" style="background-color: var(--suggest-gold);"></div>
 
                                 <div class="space-y-5">
                                     <div>
@@ -396,7 +396,7 @@
                                         <div class="text-orange-900 mb-2 border-b border-matte-gold/10 pb-2 font-black">
                                             ⚠️ عجز بقيمة <span id="shortfallAmountValue" class="en-font">0</span> في القسط الأخير.
                                         </div>
-                                        <div class="font-black text-dark-brown mb-1">المعالجة المقترحة:</div>
+                                        <div class="font-black text-dark-brown mb-1 text-[10px]">المعالجة المقترحة:</div>
                                         <ul class="text-[10px] space-y-1 pr-1 text-gray-800 font-bold list-none">
                                             <li>- نسبة استقطاع <span id="suggestedRateValue" class="text-red-700 en-font">0.00</span>% .</li>
                                             <li id="increaseDurationBullet">- زيادة المدة لتصبح <span class="en-font text-red-700">0</span> شهر.</li>
@@ -467,24 +467,24 @@
                             <!-- Summary -->
                             <div class="card-luxury bg-[#F9F4ED] border-2 border-matte-gold/20 animate-up">
                                 <h2 class="card-header-main text-lg md:text-2xl mb-6 uppercase tracking-widest text-center">خطة التملك والتحصيل</h2>
-                                <div class="grid grid-cols-4 gap-3 md:gap-4">
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
                                     <div class="gold-card shadow-lg">
-                                        <p class="card-title text-[11px] md:text-sm font-bold">المستقطع يومياً</p>
+                                        <p class="card-title font-bold text-[10px] md:text-sm">المستقطع يومياً</p>
                                         <div class="number-box py-1 mt-1"><h3 id="displayTotalDeduction" class="text-sm md:text-xl font-black en-font text-center">0</h3></div>
                                         <p class="card-subtitle text-[9px] md:text-[11px] mt-1">من POS</p>
                                     </div>
                                     <div class="gold-card shadow-lg">
-                                        <p class="card-title text-[11px] md:text-sm font-bold">أقساط العقار</p>
+                                        <p class="card-title font-bold text-[10px] md:text-sm">أقساط العقار</p>
                                         <div class="number-box py-1 mt-1"><h3 id="displayNetPropSaving" class="text-sm md:text-xl font-black en-font text-center">0</h3></div>
                                         <p class="card-subtitle text-[9px] md:text-[11px] mt-1">المحقق بالاستقطاع</p>
                                     </div>
                                     <div class="gold-card shadow-lg">
-                                        <p class="card-title text-[11px] md:text-sm font-bold">أقساط الوساطة</p>
+                                        <p class="card-title font-bold text-[10px] md:text-sm">أقساط الوساطة</p>
                                         <div class="number-box py-1 mt-1"><h3 id="displayBrokerTotalPaid" class="text-sm md:text-xl font-black en-font text-center">0</h3></div>
                                         <p class="card-subtitle text-[9px] md:text-[11px] mt-1">عبر POS</p>
                                     </div>
                                     <div class="gold-card shadow-lg">
-                                        <p class="card-title text-[11px] md:text-sm font-bold">مدة الخطة</p>
+                                        <p class="card-title font-bold text-[10px] md:text-sm">مدة الخطة</p>
                                         <div class="number-box py-1 mt-1">
                                             <div class="flex items-baseline gap-1"><h3 id="displayMonthsCount" class="text-sm md:text-xl font-black en-font">0</h3><span class="text-[8px] font-bold uppercase">M</span></div>
                                         </div>
@@ -499,23 +499,23 @@
                                 <div class="text-center mb-6">
                                     <h2 class="text-lg md:text-2xl font-black text-black">منحنى التدفقات النقدية التراكمي</h2>
                                 </div>
-                                <div id="mainChartContainer" class="h-[280px] md:h-[400px] relative border-y md:border-2 border-matte-gold/20 md:rounded-3xl p-0 bg-gray-50/10">
+                                <div id="mainChartContainer" class="h-[260px] md:h-[400px] relative border-y md:border-2 border-matte-gold/20 md:rounded-3xl p-0 bg-gray-50/10">
                                     <canvas id="mainChart"></canvas>
                                 </div>
 
-                                <div class="p-6 md:p-8 mt-6 md:mt-10 bg-[#F9F4ED] md:border-2 border-matte-gold/10 md:rounded-3xl print-break-before">
-                                    <h2 class="card-header-main text-lg mb-6 text-center">المبالغ المسددة من المشتري</h2>
+                                <div class="p-4 md:p-8 mt-6 md:mt-10 bg-[#F9F4ED] md:border-2 border-matte-gold/10 md:rounded-3xl print-break-before">
+                                    <h2 class="card-header-main text-md md:text-lg mb-4 text-center">المبالغ المسددة من المشتري</h2>
                                     <div id="summaryFooter" class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-6 buyer-pay-grid">
                                         <div class="gold-card shadow-md">
-                                            <span class="card-title text-[11px]">دفعة مقدمة نقداً</span>
+                                            <span class="card-title text-[10px] md:text-[11px]">دفعة مقدمة نقداً</span>
                                             <div class="number-box py-1.5 mt-1.5"><p id="displayInitialCashFooter" class="text-sm md:text-xl font-black en-font">0</p></div>
                                         </div>
                                         <div class="gold-card shadow-md">
-                                            <span class="card-title text-[11px]">الوساطة عند التوقيع</span>
+                                            <span class="card-title text-[10px] md:text-[11px]">الوساطة عند التوقيع</span>
                                             <div class="number-box py-1.5 mt-1.5"><p id="totalUpfrontSaeiFooter" class="text-sm md:text-xl font-black en-font">0</p></div>
                                         </div>
                                         <div class="gold-card shadow-md">
-                                            <span class="card-title text-[11px]">إجمالي تحصيل POS</span>
+                                            <span class="card-title text-[10px] md:text-[11px]">إجمالي تحصيل POS</span>
                                             <div class="number-box py-1.5 mt-1.5"><h3 id="totalDeductionFooter" class="text-sm md:text-xl font-black en-font">0</h3></div>
                                         </div>
                                     </div>
@@ -528,7 +528,7 @@
                                     <h3 class="font-black text-black text-md md:text-lg">جدول الاستقطاع والتحصيل الشهري</h3>
                                 </div>
                                 <div class="overflow-x-auto w-full">
-                                    <table class="w-full text-center en-font whitespace-nowrap min-w-[600px]">
+                                    <table class="w-full text-center en-font whitespace-nowrap min-w-[550px]">
                                         <thead>
                                             <tr class="bg-gray-50/50 text-[9px] md:text-[10px] font-black text-black uppercase border-b border-light-gold/10">
                                                 <th class="px-2 py-3 text-center">الشهر</th>
@@ -539,7 +539,7 @@
                                                 <th class="px-2 py-3 text-center">التغطية</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="tableBody" class="text-xs font-bold text-black divide-y divide-light-gold/10"></tbody>
+                                        <tbody id="tableBody" class="text-[11px] md:text-xs font-bold text-black divide-y divide-light-gold/10"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -853,10 +853,10 @@
                     const { ctx, chartArea: { right }, scales: { y } } = chart;
                     const yPos = y.getPixelForValue(target); if (target <= 0) return;
                     const text = formatter.format(Math.round(target));
-                    ctx.save(); ctx.font = 'bold 10px Verdana';
+                    ctx.save(); ctx.font = 'bold 9px Verdana';
                     const textWidth = ctx.measureText(text).width;
-                    ctx.fillStyle = '#111111'; ctx.strokeStyle = '#BCA37F'; ctx.lineWidth = 1.5;
-                    ctx.beginPath(); ctx.roundRect(right + 5, yPos - 10, textWidth + 10, 20, 4); ctx.fill(); ctx.stroke();
+                    ctx.fillStyle = '#111111'; ctx.strokeStyle = '#BCA37F'; ctx.lineWidth = 1.2;
+                    ctx.beginPath(); ctx.roundRect(right + 5, yPos - 10, textWidth + 8, 20, 4); ctx.fill(); ctx.stroke();
                     ctx.fillStyle = '#BCA37F'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
                     ctx.fillText(text, right + 10, yPos); ctx.restore();
                 }
@@ -865,13 +865,13 @@
                 type: 'line', plugins: [targetLabelPlugin],
                 data: {
                     labels: labels,
-                    datasets: [{ label: 'تراكمي', data: data, borderColor: '#BCA37F', backgroundColor: 'rgba(188, 163, 127, 0.1)', fill: true, tension: 0.4, borderWidth: 4, pointRadius: 2, pointBackgroundColor: '#111', pointBorderColor: '#fff' },
+                    datasets: [{ label: 'تراكمي', data: data, borderColor: '#BCA37F', backgroundColor: 'rgba(188, 163, 127, 0.1)', fill: true, tension: 0.4, borderWidth: 3, pointRadius: 2, pointBackgroundColor: '#111', pointBorderColor: '#fff' },
                                { label: 'الهدف', data: labels.map(() => target), borderColor: '#111', borderDash: [6, 4], borderWidth: 2, pointRadius: 0 }]
                 },
                 options: {
-                    responsive: true, maintainAspectRatio: false, layout: { padding: { right: 70, top: 10 } }, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#111' } },
+                    responsive: true, maintainAspectRatio: false, layout: { padding: { right: 65, top: 10 } }, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#111' } },
                     scales: {
-                        y: { position: 'right', grid: { color: 'rgba(0,0,0,0.03)' }, ticks: { font: { family: 'Verdana', size: 9 }, callback: (v) => formatter.format(v) } },
+                        y: { position: 'right', grid: { color: 'rgba(0,0,0,0.03)' }, ticks: { font: { family: 'Verdana', size: 8 }, callback: (v) => formatter.format(v) } },
                         x: { grid: { display: false }, ticks: { font: { family: 'Verdana', size: 8, weight: 'bold' } } }
                     }
                 }
