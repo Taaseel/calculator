@@ -445,7 +445,7 @@
 
                         <section class="lg:col-span-8 space-y-6">
                             
-                            <!-- Summary -->
+                            <!-- Summary Cards -->
                             <div class="card-luxury bg-[#F9F4ED] border-2 border-matte-gold/20 animate-up">
                                 <h2 class="card-header-main text-lg md:text-2xl mb-6 uppercase tracking-widest text-center">خطة التملك والتحصيل</h2>
                                 <div class="grid grid-cols-4 gap-3 md:gap-4">
@@ -460,7 +460,7 @@
                                         <p class="card-subtitle mt-1">المحقق بالاستقطاع</p>
                                     </div>
                                     <div class="gold-card shadow-lg">
-                                        <p class="card-title">قسط الوساطة</p>
+                                        <p class="card-title">أقساط الوساطة</p>
                                         <div class="number-box py-1 mt-1"><h3 id="displayBrokerTotalPaid" class="text-sm md:text-xl font-black en-font text-center">0</h3></div>
                                         <p class="card-subtitle mt-1">المسددة بـ POS</p>
                                     </div>
@@ -518,7 +518,7 @@
                                                 <th class="px-4 py-3 text-center">الاستقطاع اليومي POS</th>
                                                 <th class="px-4 py-3 text-center">الاستقطاع الشهري POS</th>
                                                 <th class="px-4 py-3 text-center text-orange-800">قسط الوساطة</th>
-                                                <th class="px-4 py-3 text-center text-blue-800">أقساط العقار</th>
+                                                <th class="px-4 py-3 text-center text-blue-800">قسط العقار</th>
                                                 <th class="px-4 py-3 text-center">التغطية</th>
                                             </tr>
                                         </thead>
@@ -552,6 +552,12 @@
 
         function formatInput(el) {
             let val = toEnglishDigits(el.value).replace(/[^0-9]/g, '');
+            
+            // Limit net profit to 100
+            if (el.id === 'netProfit' && val !== "") {
+                if (parseInt(val) > 100) val = "100";
+            }
+
             if (val !== "") { el.value = Number(val).toLocaleString('en-US'); } else { el.value = ""; }
             runCalculation();
         }
@@ -595,7 +601,6 @@
             document.getElementById('tableFooter').innerHTML = '';
             document.querySelectorAll('#displayTotalDeduction, #displayNetPropSaving, #displayBrokerTotalPaid, #displayMonthsCount, #displayInitialCashFooter, #totalUpfrontSaeiFooter, #totalDeductionFooter').forEach(el => el.innerText = "0");
             
-            // Explicitly clear the sidebar cost elements
             document.getElementById('brokerTotal').innerText = "0";
             document.getElementById('brokerMonthly').innerText = "0";
             document.getElementById('brokerAtSigning').innerText = "0";
@@ -797,7 +802,6 @@
                 document.getElementById('tableFooter').innerHTML = ''; 
                 document.querySelectorAll('#displayNetPropSaving, #displayBrokerTotalPaid, #displayMonthsCount, #displayInitialCashFooter, #totalUpfrontSaeiFooter, #totalDeductionFooter').forEach(el => el.innerText = "0");
                 
-                // Explicitly clear sidebar elements here as well
                 document.getElementById('brokerTotal').innerText = "0";
                 document.getElementById('brokerMonthly').innerText = "0";
                 document.getElementById('brokerAtSigning').innerText = "0";
