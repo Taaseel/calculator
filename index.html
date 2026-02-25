@@ -361,7 +361,7 @@
                                         </div>
                                     </div>
 
-                                    <!-- Treatment Notification Box -->
+                                    <!-- Shortfall Treatment Alert Box -->
                                     <div id="suggestedRateBox" class="suggested-rate-box">
                                         <div class="text-orange-900 mb-2 border-b border-matte-gold/10 pb-2 font-black">
                                             ⚠️ الوضع الراهن: هنالك عجز بزيادة قيمة <span id="shortfallAmountValue" class="en-font">0</span> في القسط الأخير.
@@ -372,6 +372,14 @@
                                             <li id="increaseDurationBullet">- زيادة مدة الادخار المستهدفة.</li>
                                             <li>- دفع مقدمة (نقداً) بقيمة <span id="shortfallAmountValueSuggest" class="en-font text-blue-900">0</span> لتغطية العجز في القسط الأخير.</li>
                                         </ul>
+                                    </div>
+
+                                    <!-- NEW: Early Success Optimization Box -->
+                                    <div id="optimizedRateBox" class="suggested-rate-box" style="background-color: var(--success-green); border-color: rgba(30, 126, 52, 0.2);">
+                                        <div class="text-success-text font-black mb-1">💡 الإنجاز المبكر:</div>
+                                        <div class="text-[10px] text-gray-800 font-bold leading-relaxed">
+                                            الخطة الحالية تحقق الهدف مبكراً! نسبة الاستقطاع المقترحة هي <span id="optimizedRateValue" class="en-font text-success-text">0.00</span>% للوصول للهدف بدقة في مدة <span id="optimizedDurationTarget" class="en-font">0</span> شهر.
+                                        </div>
                                     </div>
 
                                     <p id="rateHint" class="text-[9px] text-gray-500 font-bold italic text-center -mt-3"></p>
@@ -552,6 +560,7 @@
             const propValLabel = document.getElementById('propertyValueLabel');
             const descEl = document.getElementById('modeDescription');
             const suggestBox = document.getElementById('suggestedRateBox');
+            const optimizedBox = document.getElementById('optimizedRateBox');
             const earlyAlert = document.getElementById('earlySuccessAlert');
 
             document.getElementById('mainAmount').value = "";
@@ -569,6 +578,7 @@
             document.querySelectorAll('#displayTotalDeduction, #displayNetPropSaving, #displayBrokerTotalPaid, #displayMonthsCount, #displayInitialCashFooter, #totalUpfrontSaeiFooter, #totalDeductionFooter').forEach(el => el.innerText = "0");
             
             suggestBox.style.display = 'none';
+            optimizedBox.style.display = 'none';
             earlyAlert.style.display = 'none';
 
             if (mode === 'value') {
@@ -629,10 +639,16 @@
             const initialCash = getRawValue('initialPayment');
             const mainSales = getRawValue('mainAmount');
             const suggestBox = document.getElementById('suggestedRateBox');
+            const optimizedBox = document.getElementById('optimizedRateBox');
             const earlyAlert = document.getElementById('earlySuccessAlert');
             const durationOptionLi = document.getElementById('increaseDurationBullet');
 
-            if (mainSales <= 0) { suggestBox.style.display = 'none'; earlyAlert.style.display = 'none'; return; }
+            if (mainSales <= 0) { 
+                suggestBox.style.display = 'none'; 
+                optimizedBox.style.display = 'none';
+                earlyAlert.style.display = 'none'; 
+                return; 
+            }
             
             const monthlyBase = mainSales * 30 * (deductionRate / 100);
             const isIntensive = document.getElementById('intensiveMode').checked;
@@ -645,18 +661,29 @@
                 document.getElementById('propertyValue').value = formatter.format(Math.round(affordablePropValue));
                 calculateLedger(affordablePropValue, targetDuration, initialCash);
                 suggestBox.style.display = 'none';
+                optimizedBox.style.display = 'none';
                 earlyAlert.style.display = 'none';
             } else {
                 const propertyVal = getRawValue('propertyValue');
-                if (propertyVal <= 0) { calculateLedger(0, targetDuration, initialCash); suggestBox.style.display = 'none'; earlyAlert.style.display = 'none'; return; }
+                if (propertyVal <= 0) { 
+                    calculateLedger(0, targetDuration, initialCash); 
+                    suggestBox.style.display = 'none'; 
+                    optimizedBox.style.display = 'none';
+                    earlyAlert.style.display = 'none'; 
+                    return; 
+                }
                 
                 const gap = (propertyVal * 1.02875) - initialCash;
                 const intensiveK = isIntensive ? (Math.min(targetDuration, 5) / 5) : 0;
                 const saeiPartWithVat = (propertyVal * 0.025) * 1.15;
                 const contributionAtCurrentRate = (monthlyBase * targetDuration) + (intensiveK * saeiPartWithVat);
 
+                const neededRate = ((propertyVal * denominator - initialCash) / (mainSales * 30 * targetDuration)) * 100;
+
+                // Case 1: Shortfall
                 if (contributionAtCurrentRate < gap - 1) {
                     suggestBox.style.display = 'block';
+                    optimizedBox.style.display = 'none';
                     earlyAlert.style.display = 'none';
                     
                     if (targetDuration >= 18) {
@@ -665,17 +692,28 @@
                         durationOptionLi.style.setProperty('display', 'list-item', 'important');
                     }
 
-                    const neededRate = ((propertyVal * denominator - initialCash) / (mainSales * 30 * targetDuration)) * 100;
                     document.getElementById('suggestedRateValue').innerText = precisionFormatter.format(neededRate);
-                    
                     const shortfallAmount = Math.max(0, gap - contributionAtCurrentRate);
                     const shortfallText = formatter.format(Math.round(shortfallAmount));
                     document.getElementById('shortfallAmountValue').innerText = shortfallText;
                     document.getElementById('shortfallAmountValueSuggest').innerText = shortfallText;
-                } else { 
-                    suggestBox.style.display = 'none'; 
+                } 
+                // Case 2: Early Success (Need to check if it finishes before targetDuration)
+                else {
+                    suggestBox.style.display = 'none';
+                    // We don't toggle optimizedBox here yet, we wait for calculateLedger to find actual months
                 }
-                calculateLedger(propertyVal, targetDuration, initialCash);
+                
+                const actualMonthsUsed = calculateLedger(propertyVal, targetDuration, initialCash);
+                
+                // Case 2 continued: Only show optimized if actual < target
+                if (currentCalcMode === 'duration' && actualMonthsUsed < targetDuration) {
+                    optimizedBox.style.display = 'block';
+                    document.getElementById('optimizedRateValue').innerText = precisionFormatter.format(Math.max(0, neededRate));
+                    document.getElementById('optimizedDurationTarget').innerText = targetDuration;
+                } else {
+                    optimizedBox.style.display = 'none';
+                }
             }
         }
 
@@ -692,7 +730,7 @@
                 document.getElementById('tableBody').innerHTML = '<tr><td colspan="5" class="py-16 text-gray-300 italic font-bold">بانتظار البيانات...</td></tr>';
                 document.getElementById('tableFooter').innerHTML = ''; 
                 document.querySelectorAll('#displayNetPropSaving, #displayBrokerTotalPaid, #displayMonthsCount, #displayInitialCashFooter, #totalUpfrontSaeiFooter, #totalDeductionFooter').forEach(el => el.innerText = "0");
-                return;
+                return 0;
             }
 
             const saeiPartWithVat = (propertyVal * 0.025) * 1.15;
@@ -748,6 +786,8 @@
             document.querySelectorAll('#displayMonthsCount').forEach(el => el.innerText = actualMonthsUsed);
             document.querySelectorAll('#totalDeductionFooter').forEach(el => el.innerText = formatter.format(Math.round(totalPOSSum)));
             updateChart(labels, data, gapToFill);
+            
+            return actualMonthsUsed;
         }
 
         function updateChart(labels, data, target) {
