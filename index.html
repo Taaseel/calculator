@@ -78,7 +78,7 @@
             padding: 10px;
             font-size: 14px;
             appearance: none;
-            direction: ltr; /* Force LTR for all inputs to support English digit display */
+            direction: ltr;
         }
 
         .input-gold:focus {
@@ -143,22 +143,19 @@
 
         .suggested-rate-box {
             background-color: #FFF9E6;
-            border: 1px dashed var(--matte-gold);
-            color: #856404;
-            padding: 12px;
-            border-radius: 1rem;
-            font-size: 10.5px;
-            font-weight: 900;
-            margin-top: 10px;
-            text-align: center;
+            border: 1.5px dashed var(--matte-gold);
+            padding: 14px;
+            border-radius: 1.25rem;
+            font-size: 11px;
+            margin-top: 15px;
             display: none;
             animation: fadeIn 0.4s ease;
-            line-height: 1.6;
+            line-height: 1.8;
+            text-align: right;
         }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- MOBILE SCREEN --- */
         @media (max-width: 768px) {
             main { grid-template-columns: 1fr !important; padding: 12px !important; gap: 16px !important; }
             aside { order: 1 !important; }
@@ -171,7 +168,6 @@
             nav h1 { font-size: 11px !important; }
         }
 
-        /* --- PRINT --- */
         @media print {
             @page { size: A3 landscape; margin: 10mm; }
             nav, .no-print, button, .mode-selector-container, #modeDescription, .suggested-rate-box { display: none !important; }
@@ -193,7 +189,6 @@
 </head>
 <body class="antialiased">
 
-    <!-- UI Navigation -->
     <nav class="bg-white/80 backdrop-blur-xl border-b border-light-gold/30 px-3 md:px-8 py-3 sticky top-0 z-50 no-print">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-2 md:gap-3">
@@ -218,7 +213,6 @@
         </div>
     </nav>
 
-    <!-- Main Wrapper Table -->
     <table class="print-table w-full">
         <thead class="print-header-container hidden">
             <tr>
@@ -247,7 +241,6 @@
             <tr>
                 <td>
                     <main class="max-w-[1600px] mx-auto p-4 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
-                        
                         <aside class="lg:col-span-4 space-y-6">
                             <!-- Card 1: Client Info -->
                             <div class="card-luxury border-r-8 border-r-matte-gold">
@@ -299,16 +292,12 @@
                             <div class="card-luxury border-r-8 border-r-matte-gold">
                                 <h2 class="card-header-main">محرك العمليات المالية</h2>
                                 
-                                <!-- Mode Selector -->
                                 <div class="flex gap-2 p-1 bg-gray-100 rounded-xl mb-3 mode-selector-container">
                                     <button id="modeValueBtn" class="mode-toggle-btn active" onclick="setCalcMode('value')">تحديد القدرة الشرائية</button>
                                     <button id="modeDurationBtn" class="mode-toggle-btn" onclick="setCalcMode('duration')">تخطيط جدول التملك</button>
                                 </div>
 
-                                <!-- Explanation Area (Light Gold Background) -->
-                                <div id="modeDescription" class="text-[10px] text-dark-brown font-black mb-5 p-2.5 rounded-xl border border-matte-gold/40 text-center leading-relaxed" style="background-color: var(--suggest-gold);">
-                                    <!-- Dynamic text populated by JS -->
-                                </div>
+                                <div id="modeDescription" class="text-[10px] text-dark-brown font-black mb-5 p-2.5 rounded-xl border border-matte-gold/40 text-center leading-relaxed" style="background-color: var(--suggest-gold);"></div>
 
                                 <div class="space-y-5">
                                     <div>
@@ -340,7 +329,7 @@
                                         </div>
                                         <div>
                                             <div class="flex items-center justify-between mb-1">
-                                                <label class="text-[10px] font-black text-matte-gold">نسبة الاستوقاع %</label>
+                                                <label class="text-[10px] font-black text-matte-gold">نسبة الاستقطاع %</label>
                                                 <div class="flex items-center gap-1 no-print">
                                                     <input type="checkbox" id="manualRateToggle" class="w-3 h-3 accent-matte-gold cursor-pointer" onchange="toggleManualRate()">
                                                 </div>
@@ -349,11 +338,16 @@
                                         </div>
                                     </div>
 
-                                    <!-- Suggested Rate Notification & Shortfall Warning -->
                                     <div id="suggestedRateBox" class="suggested-rate-box">
-                                        <div id="rateTextMain">عجز في التغطية: نسبة الاستقطاع المقترحة هي <span id="suggestedRateValue" class="text-red-700 font-black">0.00</span>% للوصول للهدف.</div>
-                                        <hr class="my-2 border-matte-gold/20">
-                                        <div id="shortfallWarningText" class="text-orange-900">بالوضع الراهن سيكون هنالك تغطية العجز بزيادة قيمة <span id="shortfallAmountValue" class="font-black">0</span> في القسط الأخير.</div>
+                                        <div class="text-orange-900 mb-2 border-b border-matte-gold/10 pb-2">
+                                            ⚠️ <strong>الوضع الراهن:</strong> هنالك عجز بزيادة قيمة <span id="shortfallAmountValue" class="font-black">0</span> في القسط الأخير.
+                                        </div>
+                                        <div class="font-black text-dark-brown mb-1">أما المعالجة كالتالي:</div>
+                                        <ul class="text-[9.5px] space-y-1 pr-1 text-gray-700">
+                                            <li>• نسبة الاستقطاع المقترحة هي <span id="suggestedRateValue" class="text-red-700 font-black">0.00</span>% للوصول للهدف.</li>
+                                            <li>• زيادة مدة الادخار المستهدفة.</li>
+                                            <li>• دفع مقدمة (نقداً) بقيمة <span id="shortfallAmountValueSuggest" class="font-black text-blue-900">0</span> لتغطية العجز في القسط الأخير.</li>
+                                        </ul>
                                     </div>
 
                                     <p id="rateHint" class="text-[9px] text-gray-500 font-bold italic text-center -mt-3"></p>
@@ -370,7 +364,6 @@
                                 </div>
                             </div>
 
-                            <!-- Card 4: Cost Analysis -->
                             <div class="card-luxury border-r-8 border-r-matte-gold">
                                 <h2 class="card-header-main">تحليل تكاليف التملك</h2>
                                 <div class="space-y-5">
@@ -381,23 +374,21 @@
                                             <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-dark-brown">SAR</span>
                                         </div>
                                     </div>
-
                                     <div>
-                                        <label class="input-label">النقد المتوفر (الكاش حالياً)</label>
+                                        <label class="input-label">دفعة مقدمة (نقداً)</label>
                                         <div class="relative">
                                             <input type="text" id="initialPayment" placeholder="0" class="input-gold text-xl font-black en-font" oninput="formatInput(this); runCalculation()">
                                             <span class="absolute left-3 top-1/2 -translate-y-1/2 text-[9px] font-bold text-gray-400">SAR</span>
                                         </div>
                                     </div>
-
                                     <div id="costDetailsSidebar" class="space-y-2 p-3 bg-pale-gold rounded-xl border border-dashed border-matte-gold/40">
                                         <div class="flex justify-between items-center text-[10px] font-bold">
-                                            <span>إجمالي السعي (شامل الضريبة):</span>
+                                            <span>إجمالي الوساطة وإدارة المنتج 5% (شامل الضريبة):</span>
                                             <span id="brokerTotal" class="en-font font-black">0</span>
                                         </div>
                                         <hr class="border-matte-gold/10">
                                         <div class="flex justify-between items-center text-[10px] font-black text-orange-900">
-                                            <span>قسط السعي الشهري (لمدة 5 ش):</span>
+                                            <span>قسط الوساطة الشهري 2.5% (لمدة 5 ش):</span>
                                             <span id="brokerMonthly" class="en-font">0</span>
                                         </div>
                                     </div>
@@ -405,7 +396,6 @@
                             </div>
                         </aside>
 
-                        <!-- Results Content -->
                         <section class="lg:col-span-8 space-y-6">
                             
                             <!-- Summary Cards -->
@@ -450,7 +440,7 @@
                                     <h2 class="card-header-main text-lg mb-6 text-center">المبالغ التي يتم سدادها من المشتري</h2>
                                     <div id="summaryFooter" class="grid grid-cols-2 gap-4 md:gap-6">
                                         <div class="gold-card shadow-md">
-                                            <span class="card-title">نقد عند التوقيع</span>
+                                            <span class="card-title">الوساطة (نقداً عند التوقيع)</span>
                                             <div class="number-box py-1.5 mt-1.5"><p id="totalUpfrontNeeded" class="text-sm md:text-xl font-black en-font">0</p></div>
                                         </div>
                                         <div class="gold-card shadow-md">
@@ -461,7 +451,6 @@
                                 </div>
                             </div>
 
-                            <!-- Table Section -->
                             <div class="card-luxury overflow-hidden">
                                 <div class="px-6 py-4 border-b border-light-gold/20 bg-gray-50/50 text-center">
                                     <h3 class="font-black text-black text-lg">جدول الاستقطاع والتحصيل الشهري</h3>
@@ -477,10 +466,8 @@
                                                 <th class="px-4 py-3 text-center">التغطية</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="tableBody" class="text-xs font-bold text-black divide-y divide-light-gold/10">
-                                        </tbody>
-                                        <tfoot id="tableFooter">
-                                        </tfoot>
+                                        <tbody id="tableBody" class="text-xs font-bold text-black divide-y divide-light-gold/10"></tbody>
+                                        <tfoot id="tableFooter"></tfoot>
                                     </table>
                                 </div>
                             </div>
@@ -499,49 +486,28 @@
 
         document.getElementById('exportBtn').addEventListener('click', () => window.print());
 
-        /**
-         * Converts Eastern Arabic numerals (٠-٩) to English numerals (0-9).
-         * Strictly filters the value to ensure only English digits are kept.
-         * @param {string} str - The string to convert.
-         * @returns {string} - Converted string with only digits.
-         */
         function toEnglishDigits(str) {
             const arabicNumerals = [/٠/g, /١/g, /٢/g, /٣/g, /٤/g, /٥/g, /٦/g, /٧/g, /٨/g, /٩/g];
             let cleanStr = str;
             for (let i = 0; i < 10; i++) {
                 cleanStr = cleanStr.replace(arabicNumerals[i], i);
             }
-            // Remove any remaining non-digit characters except for comma handling later
             return cleanStr;
         }
 
-        /**
-         * Cleans input to ensure ONLY English digits are allowed.
-         * @param {HTMLInputElement} el - The input element.
-         */
         function formatInput(el) {
-            // 1. Convert Arabic numerals to English
             let val = toEnglishDigits(el.value);
-            
-            // 2. Remove any character that is NOT an English digit 0-9
             val = val.replace(/[^0-9]/g, '');
-            
-            // 3. Re-format with commas for display if it's not empty
             if (val !== "") {
-                // If it's the profit field, we might not want commas beyond 100, 
-                // but for consistency we use the number formatter.
                 el.value = Number(val).toLocaleString('en-US');
             } else {
                 el.value = "";
             }
-            
-            // Trigger calculation
             runCalculation();
         }
 
         function getRawValue(id) {
             let val = document.getElementById(id).value;
-            // Clean value to get raw number
             let raw = toEnglishDigits(val).replace(/[^0-9.]/g, '');
             return parseFloat(raw) || 0;
         }
@@ -557,19 +523,15 @@
             const descEl = document.getElementById('modeDescription');
             const suggestBox = document.getElementById('suggestedRateBox');
 
-            // RESET ALL FINANCIAL FIELDS FOR INDEPENDENT MODES
             document.getElementById('mainAmount').value = "";
             document.getElementById('netProfit').value = "";
             document.getElementById('initialPayment').value = "";
             propValInput.value = "";
             durationDropdown.value = "1";
-            
-            // Reset Deduction to default 7% and Auto mode
             document.getElementById('deductionRate').value = "7";
             document.getElementById('manualRateToggle').checked = false;
             toggleManualRate(); 
 
-            // CLEAR RESULTS UI
             document.getElementById('tableBody').innerHTML = '<tr><td colspan="5" class="py-16 text-gray-300 italic font-bold">بانتظار البيانات...</td></tr>';
             document.getElementById('tableFooter').innerHTML = '';
             document.querySelectorAll('#displayTotalDeduction, #displayNetPropSaving, #displayBrokerTotalPaid, #displayMonthsCount, #totalUpfrontNeeded, #totalDeductionFooter').forEach(el => el.innerText = "0");
@@ -623,7 +585,6 @@
             const netProfit = getRawValue('netProfit');
             const hintEl = document.getElementById('rateHint');
             let rate;
-            
             if (netProfit >= 20) {
                 rate = 10;
                 hintEl.innerText = "سياسة الربح 20%+: استقطاع 10%";
@@ -631,7 +592,6 @@
                 rate = 7;
                 hintEl.innerText = "سياسة الربح أقل من 20%: استقطاع 7%";
             }
-            
             document.getElementById('deductionRate').value = rate;
             return rate;
         }
@@ -641,7 +601,6 @@
             const initialCash = getRawValue('initialPayment');
             const mainSales = getRawValue('mainAmount');
             if (mainSales <= 0) return; 
-            
             const monthlyBase = mainSales * 30 * (deductionRate / 100);
             const isIntensive = document.getElementById('intensiveMode').checked;
             const suggestBox = document.getElementById('suggestedRateBox');
@@ -657,28 +616,20 @@
                 suggestBox.style.display = 'none';
             } else {
                 const propertyVal = getRawValue('propertyValue');
-                if (propertyVal <= 0) {
-                    calculateLedger(0, targetDuration, initialCash);
-                    return;
-                }
-                
+                if (propertyVal <= 0) { calculateLedger(0, targetDuration, initialCash); return; }
                 const gap = (propertyVal * 1.02875) - initialCash;
                 const intensiveK = isIntensive ? (Math.min(targetDuration, 5) / 5) : 0;
                 const saeiPartWithVat = (propertyVal * 0.025) * 1.15;
-                
                 const contributionAtCurrentRate = (monthlyBase * targetDuration) + (intensiveK * saeiPartWithVat);
 
                 if (contributionAtCurrentRate < gap - 1) {
                     suggestBox.style.display = 'block';
                     const neededRate = ((propertyVal * denominator - initialCash) / (mainSales * 30 * targetDuration)) * 100;
                     document.getElementById('suggestedRateValue').innerText = precisionFormatter.format(neededRate);
-                    
                     const shortfallAmount = gap - contributionAtCurrentRate;
                     document.getElementById('shortfallAmountValue').innerText = formatter.format(Math.round(shortfallAmount));
-                } else {
-                    suggestBox.style.display = 'none';
-                }
-                
+                    document.getElementById('shortfallAmountValueSuggest').innerText = formatter.format(Math.round(shortfallAmount));
+                } else { suggestBox.style.display = 'none'; }
                 calculateLedger(propertyVal, targetDuration, initialCash);
             }
         }
@@ -688,7 +639,6 @@
             const isIntensive = document.getElementById('intensiveMode').checked;
             const sales = getRawValue('mainAmount');
             const monthlyBase = sales * 30 * (baseRate / 100);
-
             document.querySelectorAll('#displayTotalDeduction').forEach(el => el.innerText = formatter.format(Math.round(sales * (baseRate / 100))));
 
             if (propertyVal <= 0) {
@@ -715,9 +665,7 @@
                 let curSaei = (m <= 5) ? monthlySaei : 0;
                 let curNet = monthlyBase;
                 let curPOS = isIntensive ? (curNet + curSaei) : curNet;
-                
                 if (!isIntensive && m <= 5) curNet = Math.max(0, monthlyBase - curSaei);
-
                 if (accDed + curPOS >= gapToFill - 1 || m === targetDuration) {
                     curPOS = Math.max(0, gapToFill - accDed);
                     if (m <= 5 && curSaei > 0) {
@@ -727,12 +675,9 @@
                         curSaei = isIntensive ? (curSaei * ratio) : 0;
                     } else { curNet = curPOS; curSaei = 0; }
                 }
-
                 accDed += curPOS; totalPOSSum += curPOS; totalSaeiSum += curSaei; totalNetSum += curNet;
                 labels.push(m + ' M'); data.push(Math.round(accDed));
-                
                 const displayPerc = (gapToFill > 0) ? Math.min(100, (accDed / gapToFill * 100)).toFixed(1) : "100.0";
-                
                 html += `<tr class="text-center">
                     <td class="py-4 font-black text-matte-gold">${m}</td>
                     <td class="py-4">${formatter.format(Math.round(curPOS))}</td>
@@ -740,12 +685,10 @@
                     <td class="py-4 text-blue-800">${formatter.format(Math.round(curNet))}</td>
                     <td class="py-4"><span class="px-2 py-0.5 bg-gray-100 rounded-full text-[10px] font-black">${displayPerc}%</span></td>
                 </tr>`;
-                
                 if (accDed >= gapToFill - 1) break;
             }
 
             document.getElementById('tableBody').innerHTML = html;
-            
             document.getElementById('tableFooter').innerHTML = `
                 <tr style="background-color: #BCA37F !important; color: #000 !important; font-weight: 900 !important; text-align: center !important;">
                     <td style="padding: 18px 10px !important; border-top: 3px solid #111 !important;">الإجمالي</td>
@@ -754,7 +697,6 @@
                     <td style="padding: 18px 10px !important; border-top: 3px solid #111 !important; color: #1e3a8a !important;">${formatter.format(Math.round(totalNetSum))}</td>
                     <td style="padding: 18px 10px !important; border-top: 3px solid #111 !important;">${(gapToFill > 0 ? Math.min(100, (totalPOSSum/gapToFill*100)) : 100).toFixed(1)}%</td>
                 </tr>`;
-            
             document.querySelectorAll('#displayNetPropSaving').forEach(el => el.innerText = formatter.format(Math.round(totalNetSum)));
             document.querySelectorAll('#displayMonthsCount').forEach(el => el.innerText = labels.length);
             document.querySelectorAll('#totalDeductionFooter').forEach(el => el.innerText = formatter.format(Math.round(totalPOSSum)));
