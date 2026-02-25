@@ -215,7 +215,7 @@
             </div>
             <button id="exportBtn" class="flex items-center gap-1.5 px-3 py-2 bg-matte-gold text-black font-black rounded-lg hover:brightness-110 shadow-md border-b-2 border-black/20 text-[10px] md:text-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 md:h-4 md:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                 </svg>
                 <span>تصدير التقرير</span>
             </button>
@@ -347,16 +347,16 @@
                                         </div>
                                     </div>
 
-                                    <!-- Treatment Notification Box -->
+                                    <!-- Shortfall Treatment Box -->
                                     <div id="suggestedRateBox" class="suggested-rate-box">
                                         <div class="text-orange-900 mb-2 border-b border-matte-gold/10 pb-2 font-black">
                                             ⚠️ الوضع الراهن: هنالك عجز بزيادة قيمة <span id="shortfallAmountValue" class="en-font">0</span> في القسط الأخير.
                                         </div>
                                         <div class="font-black text-dark-brown mb-1">أما المعالجة كالتالي:</div>
-                                        <ul class="text-[10px] space-y-1 pr-1 text-gray-800 font-bold">
-                                            <li>• نسبة الاستقطاع المقترحة هي <span id="suggestedRateValue" class="text-red-700 en-font">0.00</span>% للوصول للهدف.</li>
-                                            <li id="increaseDurationBullet">• زيادة مدة الادخار المستهدفة.</li>
-                                            <li>• دفع مقدمة (نقداً) بقيمة <span id="shortfallAmountValueSuggest" class="en-font text-blue-900">0</span> لتغطية العجز في القسط الأخير.</li>
+                                        <ul class="text-[10px] space-y-1 pr-1 text-gray-800 font-bold list-none">
+                                            <li>- نسبة الاستقطاع المقترحة هي <span id="suggestedRateValue" class="text-red-700 en-font">0.00</span>% للوصول للهدف.</li>
+                                            <li id="increaseDurationBullet">- زيادة مدة الادخار المستهدفة.</li>
+                                            <li>- دفع مقدمة (نقداً) بقيمة <span id="shortfallAmountValueSuggest" class="en-font text-blue-900">0</span> لتغطية العجز في القسط الأخير.</li>
                                         </ul>
                                     </div>
 
@@ -629,11 +629,11 @@
                 if (contributionAtCurrentRate < gap - 1) {
                     suggestBox.style.display = 'block';
                     
-                    // Conditionally show duration increase bullet
+                    // Conditionally show duration increase bullet - FORCE HIDE IF 18
                     if (targetDuration >= 18) {
-                        durationOptionLi.style.display = 'none';
+                        durationOptionLi.style.setProperty('display', 'none', 'important');
                     } else {
-                        durationOptionLi.style.display = 'list-item';
+                        durationOptionLi.style.setProperty('display', 'list-item', 'important');
                     }
 
                     // Calculate suggested rate
@@ -687,8 +687,7 @@
                 if (accDed + curPOS >= gapToFill - 1 || m === targetDuration) {
                     curPOS = Math.max(0, gapToFill - accDed);
                     if (m <= 5 && curSaei > 0) {
-                        let potentialPortion = isIntensive ? (monthlyBase + curSaei) : monthlyBase;
-                        let ratio = curPOS / (potentialPortion || 1);
+                        let ratio = curPOS / ((isIntensive ? (monthlyBase + curSaei) : monthlyBase) || 1);
                         curNet = isIntensive ? (monthlyBase * ratio) : curPOS;
                         curSaei = isIntensive ? (curSaei * ratio) : 0;
                     } else { curNet = curPOS; curSaei = 0; }
